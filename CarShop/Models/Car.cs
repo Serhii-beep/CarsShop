@@ -14,7 +14,6 @@ namespace CarShop
         public int Year { get; set; }
         public int ProducerId { get; set; }
         public string PhotoUrl { get; set; }
-        public int Amount { get; set; }
         public string Description { get; set; }
         public int? OrderId { get; set; }
 
