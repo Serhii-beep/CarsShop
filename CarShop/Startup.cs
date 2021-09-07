@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using CarShop.Repository;
 
 namespace CarShop
 {
@@ -26,6 +27,7 @@ namespace CarShop
         {
             string connection = Configuration.GetConnectionString("DefaultConnection");
             services.AddDbContext<DbCarShopContext>(options => options.UseSqlServer(connection));
+            services.AddTransient<ICarRepository, CarRepository>();
             services.AddControllersWithViews();
         }
 
