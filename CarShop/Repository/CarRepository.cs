@@ -36,7 +36,7 @@ namespace CarShop.Repository
 
         public async Task<IEnumerable<Car>> GetAllCars()
         {
-            return await _context.Cars.ToListAsync();
+            return await _context.Cars.Include(c => c.Producer).ToListAsync();
         }
 
         public async void UpdateCar(Car car)
