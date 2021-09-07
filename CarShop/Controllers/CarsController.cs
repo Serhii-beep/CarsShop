@@ -6,26 +6,25 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using CarShop;
+using CarShop.Repository;
 
 namespace CarShop.Controllers
 {
     public class CarsController : Controller
     {
         private readonly DbCarShopContext _context;
-        //private readonly ICarRepository carRepository;
+        private ICarRepository _carRepo;
 
-        public CarsController(DbCarShopContext context /*ICarRepository _carRepository*/)
+        public CarsController(DbCarShopContext context, ICarRepository carRepo)
         {
-            //carRepository = _carRepository;
             _context = context;
+            _carRepo = carRepo;
         }
 
         // GET: Cars
         public async Task<IActionResult> Index()
         {
-            var dbCarShopContext = _context.Cars.Include(c => c.Category).Include(c => c.Order).Include(c => c.Producer);
-            //var dbCarShopContext = carRepository.GetCars();
-            return View(await dbCarShopContext.ToListAsync());
+            return View(await _carRepo.GetAllCars());
         }
 
         // GET: Cars/Details/5
@@ -65,8 +64,7 @@ namespace CarShop.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(car);
-                await _context.SaveChangesAsync();
+                _carRepo.AddCar(car);
                 return RedirectToAction(nameof(Index));
             }
             ViewData["CategoryId"] = new SelectList(_context.Categories, "CategoryId", "Name", car.CategoryId);
@@ -110,8 +108,7 @@ namespace CarShop.Controllers
             {
                 try
                 {
-                    _context.Update(car);
-                    await _context.SaveChangesAsync();
+                    _carRepo.UpdateCar(car);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -158,9 +155,7 @@ namespace CarShop.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var car = await _context.Cars.FindAsync(id);
-            _context.Cars.Remove(car);
-            await _context.SaveChangesAsync();
+            _carRepo.DeleteCar(id);
             return RedirectToAction(nameof(Index));
         }
 
