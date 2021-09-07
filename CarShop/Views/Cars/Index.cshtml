@@ -16,19 +16,21 @@
         @foreach (var item in Model)
         {
         <div class="col">
-            <table class="table">
+            <table class="table-borderless">
                 <tbody>
-                    <tr>
-                        <div><img src=@item.PhotoUrl></div>
-                        @Html.DisplayFor(modelItem => item.Producer.Name) @Html.DisplayFor(modelItem => item.Model)
-                    </tr>
                 <tr>
                     <td>
-                        <label>Price: @Html.DisplayFor(modelItem => item.Price) $</label>
+                        <div><img src=@item.PhotoUrl width="200" height="200"></div>
+                        @Html.DisplayFor(modelItem => item.Producer.Name)
+                        @Html.DisplayFor(modelItem => item.Model)
+                        @Html.DisplayFor(modelItem => item.Year)
                     </td>
                 </tr>
-                <tr>
-                    @Html.DisplayFor(modelItem => item.Year)
+                <tr >
+                    <td>
+                        @Html.DisplayNameFor(modelItem => item.Price):
+                        @Html.DisplayFor(modelItem => item.Price)$
+                    </td>
                 </tr>
                 </tbody>
             </table>
