@@ -5,4 +5,5 @@
 /CarShop/appsettings.Development.json
 /CarShop/appsettings.json
 /CarShop/CarShop.csproj
-/.vs/CarShop/v16/.suo
+.vs/
+*.suo
