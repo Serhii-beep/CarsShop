@@ -19,20 +19,20 @@
             <table class="table">
                 <tbody>
                     <tr>
-                        @{ string source = item.PhotoUrl;
-                            <div class="h-50"><img src=@source /></div>
-                        }
+                        <div ><img src=@item.PhotoUrl width="200" height="200"></div>
                         @Html.DisplayFor(modelItem => item.Model)
                     </tr>
-                    <tr>
-                        @Html.DisplayFor(modelItem => item.Price)
-                    </tr>
-                    <tr>
-                        @Html.DisplayFor(modelItem => item.Year)
-                    </tr>
-                    <tr>
-                        @Html.DisplayFor(modelItem => item.Producer.Country)
-                    </tr>
+                <tr>
+                    <td>
+                            @Html.DisplayFor(modelItem => item.Price)
+                    </td>
+                </tr>
+                <tr>
+                    @Html.DisplayFor(modelItem => item.Year)
+                </tr>
+                <tr>
+                    @Html.DisplayFor(modelItem => item.Producer.Country)
+                </tr>
                 </tbody>
             </table>
         </div>
