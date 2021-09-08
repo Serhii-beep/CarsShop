@@ -1,20 +1,22 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
-
+using Microsoft.Extensions.Configuration;
 #nullable disable
 
 namespace CarShop
 {
     public partial class DbCarShopContext : DbContext
     {
+        public IConfiguration Configuration { get; }
         public DbCarShopContext()
         {
         }
 
-        public DbCarShopContext(DbContextOptions<DbCarShopContext> options)
+        public DbCarShopContext(DbContextOptions<DbCarShopContext> options, IConfiguration configuration)
             : base(options)
         {
+            Configuration = configuration;
         }
 
         public virtual DbSet<Car> Cars { get; set; }
@@ -26,8 +28,7 @@ namespace CarShop
         {
             if (!optionsBuilder.IsConfigured)
             {
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-                optionsBuilder.UseSqlServer("Server=DESKTOP-IO4EGCU;Database=DbCarShop;Trusted_Connection=True;");
+                optionsBuilder.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
             }
         }
 
