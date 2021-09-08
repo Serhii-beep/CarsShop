@@ -60,9 +60,9 @@ namespace CarShop.Repository
                 _context.Remove(category);
                 await _context.SaveChangesAsync();
             }
-            catch (DbUpdateConcurrencyException ex)
+            catch (DbUpdateException ex)
             {
-                throw new DbUpdateConcurrencyException(ex.Message);
+                throw new DbUpdateException(ex.Message);
             }
         }
 
