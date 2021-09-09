@@ -11,6 +11,7 @@ namespace CarShop.Repository
         Task AddCar(Car car);
         Car FindCar(int id);
         Task<IEnumerable<Car>> GetAllCars();
+        Task<IEnumerable<Car>> GetAllCarsByCategory(int categoryId);
         Task UpdateCar(Car car);
         Task DeleteCar(int id);
     }
