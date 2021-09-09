@@ -15,7 +15,7 @@ namespace CarShop.Repository
             _context = context;
         }
 
-        public async void AddCar(Car car)
+        public async  Task AddCar(Car car)
         {
             try
             {
@@ -39,7 +39,7 @@ namespace CarShop.Repository
             return await _context.Cars.Include(c => c.Producer).ToListAsync();
         }
 
-        public async void UpdateCar(Car car)
+        public async Task UpdateCar(Car car)
         {
             try
             {
@@ -52,7 +52,7 @@ namespace CarShop.Repository
             }
         }
 
-        public async void DeleteCar(int id)
+        public async Task DeleteCar(int id)
         {
             Car car = await _context.Cars.FirstOrDefaultAsync(c => c.CarId == id);
             try

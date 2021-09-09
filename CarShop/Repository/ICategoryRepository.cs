@@ -7,10 +7,10 @@ namespace CarShop.Repository
 {
     public interface ICategoryRepository
     {
-        void AddCategory(Category category);
+        Task AddCategory(Category category);
         Task<IEnumerable<Category>> GetCategories();
         Category GetCategory(int id);
-        void DeleteCategory(int id);
-        void UpdateCategory(Category category);
+        Task DeleteCategory(int id);
+        Task UpdateCategory(Category category);
     }
 }

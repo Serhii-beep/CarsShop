@@ -14,7 +14,7 @@ namespace CarShop.Repository
             _context = context;
         }
 
-        public async void AddProducer(Producer producer)
+        public async Task AddProducer(Producer producer)
         {
             try
             {
@@ -38,7 +38,7 @@ namespace CarShop.Repository
             return await _context.Producers.ToListAsync();
         }
 
-        public async void UpdateProducer(Producer producer)
+        public async Task UpdateProducer(Producer producer)
         {
             try
             {
@@ -51,7 +51,7 @@ namespace CarShop.Repository
             }
         }
 
-        public async void DeleteProducer(int id)
+        public async Task DeleteProducer(int id)
         {
             Producer producer = await _context.Producers.FirstOrDefaultAsync(a => a.ProducerId == id);
             try

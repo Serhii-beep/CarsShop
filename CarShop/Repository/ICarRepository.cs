@@ -8,10 +8,10 @@ namespace CarShop.Repository
 {
     public interface ICarRepository
     {
-        void AddCar(Car car);
+        Task AddCar(Car car);
         Car FindCar(int id);
         Task<IEnumerable<Car>> GetAllCars();
-        void UpdateCar(Car car);
-        void DeleteCar(int id);
+        Task UpdateCar(Car car);
+        Task DeleteCar(int id);
     }
 }
