@@ -1,0 +1,73 @@
+﻿@model CarShop.Car
+
+@{
+    ViewData["Title"] = "View";
+}
+
+<h1>@Html.DisplayFor(model => model.Model)</h1>
+
+<h4>@Html.DisplayFor(model => model.Category.Name)</h4>
+
+
+<br />
+<div class="container">
+    <div class="row row-cols-2">
+        <div class="col">
+            <dl class="row">
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.PhotoUrl)
+                </dt>
+                <dd class="col-sm-10">
+                    <img src=@Model.PhotoUrl width="200" height="200">
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.Price)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.Price)$
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.Year)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.Year)
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.Description)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.Description)
+                </dd>
+            </dl>
+            <div>
+                <a asp-action="Edit" asp-route-id="@Model.CarId">Edit</a> |
+                <a asp-action="Index">Back to List</a>
+            </div>
+        </div>
+        <div class="col">
+            <dl class="row">
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.Producer)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.Producer.Name)
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.Producer.Country)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.Producer.Country)
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.Producer.LogoUrl)
+                </dt>
+                <dd class="col-sm-10">
+                    <img src=@Model.Producer.LogoUrl width="200" height="200">
+                </dd>
+            </dl>
+            <div>
+                <a asp-action="Details" asp-controller="Producer" asp-route-id="@Model.ProducerId">Details</a>
+            </div>
+        </div>
+    </div>
+</div>
