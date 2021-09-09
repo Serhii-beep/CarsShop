@@ -64,7 +64,7 @@ namespace CarShop.Controllers
         {
             if (ModelState.IsValid)
             {
-                _carRepo.AddCar(car);
+                await _carRepo.AddCar(car);
                 return RedirectToAction(nameof(Index));
             }
             ViewData["CategoryId"] = new SelectList(_context.Categories, "CategoryId", "Name", car.CategoryId);
@@ -108,7 +108,7 @@ namespace CarShop.Controllers
             {
                 try
                 {
-                    _carRepo.UpdateCar(car);
+                    await _carRepo.UpdateCar(car);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -155,7 +155,7 @@ namespace CarShop.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            _carRepo.DeleteCar(id);
+            await _carRepo.DeleteCar(id);
             return RedirectToAction(nameof(Index));
         }
 

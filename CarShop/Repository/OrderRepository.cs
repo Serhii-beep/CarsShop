@@ -14,7 +14,7 @@ namespace CarShop.Repository
             _context = context;
         }
 
-        public async void AddOrder(Order order)
+        public async Task AddOrder(Order order)
         {
             try
             {
@@ -39,7 +39,7 @@ namespace CarShop.Repository
         }
 
 
-        public async void UpdateOrder(Order order)
+        public async Task UpdateOrder(Order order)
         {
 
             try
@@ -53,7 +53,7 @@ namespace CarShop.Repository
             }
         }
 
-        public async void DeleteOrder(int id)
+        public async Task DeleteOrder(int id)
         {
             Order order = await _context.Orders.FirstOrDefaultAsync(a => a.OrderId == id);
             try

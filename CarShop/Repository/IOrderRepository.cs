@@ -7,10 +7,10 @@ namespace CarShop.Repository
 {
     public interface IOrderRepository
     {
-        void AddOrder(Order order);
+        Task AddOrder(Order order);
         Task<IEnumerable<Order>> GetOrders();
         Order GetOrder(int id);
-        void DeleteOrder(int id);
-        void UpdateOrder(Order order);
+        Task DeleteOrder(int id);
+        Task UpdateOrder(Order order);
     }
 }

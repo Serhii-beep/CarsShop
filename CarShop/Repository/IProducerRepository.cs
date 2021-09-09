@@ -7,10 +7,10 @@ namespace CarShop.Repository
 {
     public interface IProducerRepository
     {
-        void AddProducer(Producer producer);
+        Task AddProducer(Producer producer);
         Task<IEnumerable<Producer>> GetProducers();
         Producer GetProducer(int id);
-        void DeleteProducer(int id);
-        void UpdateProducer(Producer producer);
+        Task DeleteProducer(int id);
+        Task UpdateProducer(Producer producer);
     }
 }

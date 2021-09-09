@@ -15,7 +15,7 @@ namespace CarShop.Repository
             _context = context;
         }
 
-        public async void AddCategory(Category category)
+        public async Task AddCategory(Category category)
         {
             try
             {
@@ -39,7 +39,7 @@ namespace CarShop.Repository
             return category;
         }
 
-        public async void UpdateCategory(Category category)
+        public async Task UpdateCategory(Category category)
         {
             try
             {
@@ -52,7 +52,7 @@ namespace CarShop.Repository
             }
         }
 
-        public async void DeleteCategory(int id)
+        public async Task DeleteCategory(int id)
         {
             Category category = await _context.Categories.FirstOrDefaultAsync(c => c.CategoryId == id);
             try
