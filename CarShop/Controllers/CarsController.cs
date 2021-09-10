@@ -88,7 +88,7 @@ namespace CarShop.Controllers
                 return NotFound();
             }
 
-            var car = await _context.Cars.FindAsync(id);
+            var car = await _carRepo.FindCar((int)id);
             if (car == null)
             {
                 return NotFound();
@@ -169,6 +169,15 @@ namespace CarShop.Controllers
         private bool CarExists(int id)
         {
             return _context.Cars.Any(e => e.CarId == id);
+        }
+
+        private bool ValidateYear(int year)
+        {
+            if(year < 2000 || year > DateTime.UtcNow.Year)
+            {
+                return false;
+            }
+            return true;
         }
     }
 }

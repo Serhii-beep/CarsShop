@@ -28,9 +28,9 @@ namespace CarShop.Repository
             }
         }
 
-        public Car FindCar(int id)
+        public async Task<Car> FindCar(int id)
         {
-            Car car = _context.Cars.Where(c => c.CarId == id).FirstOrDefault();
+            Car car = await _context.Cars.Where(c => c.CarId == id).FirstOrDefaultAsync();
             return car;
         }
 
