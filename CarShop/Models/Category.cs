@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 #nullable disable
 
@@ -13,6 +14,7 @@ namespace CarShop
         }
 
         public int CategoryId { get; set; }
+        [Required(ErrorMessage = "Required field")]
         public string Name { get; set; }
 
         public virtual ICollection<Car> Cars { get; set; }
