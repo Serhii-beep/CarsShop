@@ -104,9 +104,9 @@ namespace CarShop.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("CarId,Model,CategoryId,Price,Year,ProducerId,PhotoUrl,Description,OrderId")] Car car)
+        public async Task<IActionResult> Edit(int CarId, [Bind("CarId,Model,CategoryId,Price,Year,ProducerId,PhotoUrl,Description,OrderId")] Car car)
         {
-            if (id != car.CarId)
+            if (CarId != car.CarId)
             {
                 return NotFound();
             }
@@ -160,24 +160,15 @@ namespace CarShop.Controllers
         // POST: Cars/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(int CarId)
         {
-            await _carRepo.DeleteCar(id);
+            await _carRepo.DeleteCar(CarId);
             return RedirectToAction(nameof(Index));
         }
 
         private bool CarExists(int id)
         {
             return _context.Cars.Any(e => e.CarId == id);
-        }
-
-        private bool ValidateYear(int year)
-        {
-            if(year < 2000 || year > DateTime.UtcNow.Year)
-            {
-                return false;
-            }
-            return true;
         }
     }
 }

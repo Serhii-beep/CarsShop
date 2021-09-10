@@ -33,7 +33,7 @@
 
     function displayCategories(data) {
         const ul = document.getElementById('categories');
-        if (ul.childElementCount == 0) {
+        if (ul.childElementCount == 1) {
             for (let i = 0; i < data.length; ++i) {
                 let li = document.createElement('li');
                 let li_a = document.createElement('a');
