@@ -26,23 +26,22 @@
     a.addEventListener('click', getCategories);
 
     function getCategories() {
-        fetch('api/Categories/AllCategories')
+        fetch('https://localhost:44390/api/Categories/AllCategories')
             .then(response => response.json())
             .then(data => displayCategories(data));
     }
 
     function displayCategories(data) {
         const ul = document.getElementById('categories');
-        while (ul.firstChild) {
-            ul.removeChild(ul.firstChild);
-        }
-        for (let i = 0; i < data.length; ++i) {
-            let li = document.createElement('li');
-            let li_a = document.createElement('a');
-            li_a.textContent = data[i].name;
-            li_a.href = "#";
-            li.appendChild(li_a);
-            ul.appendChild(li);
+        if (ul.childElementCount == 0) {
+            for (let i = 0; i < data.length; ++i) {
+                let li = document.createElement('li');
+                let li_a = document.createElement('a');
+                li_a.textContent = data[i].name;
+                li_a.href = `/Cars/Index/${data[i].categoryId}`;
+                li.appendChild(li_a);
+                ul.appendChild(li);
+            }
         }
     }
 

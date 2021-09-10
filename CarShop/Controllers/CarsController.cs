@@ -22,9 +22,16 @@ namespace CarShop.Controllers
         }
 
         // GET: Cars
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int? categoryId)
         {
-            return View(await _carRepo.GetAllCars());
+            if (categoryId == null)
+            {
+                return View(await _carRepo.GetAllCars());
+            }
+            else
+            {
+                return View(await _carRepo.GetAllCarsByCategory((int)categoryId));
+            }
         }
 
         // GET: Cars/Details/5

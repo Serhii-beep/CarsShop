@@ -39,6 +39,11 @@ namespace CarShop.Repository
             return await _context.Cars.Include(c => c.Producer).ToListAsync();
         }
 
+        public async Task<IEnumerable<Car>> GetAllCarsByCategory(int categoryId)
+        {
+            return await _context.Cars.Where(c => c.CategoryId == categoryId).Include(c => c.Producer).ToListAsync();
+        }
+
         public async Task UpdateCar(Car car)
         {
             try

@@ -3,11 +3,10 @@
 @{
     ViewData["Title"] = "Index";
 }
-
 <h1>Index</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create"><i class="fas fa-plus-square"></i> Create New</a>
 </p>
 
 
@@ -15,26 +14,33 @@
     <div class="row row-cols-4">
         @foreach (var item in Model)
         {
-        <div class="col">
-            <table class="table-borderless">
-                <tbody>
-                <tr>
-                    <td>
-                        <div><img src=@item.PhotoUrl width="200" height="200"></div>
-                        @Html.DisplayFor(modelItem => item.Producer.Name)
-                        @Html.DisplayFor(modelItem => item.Model)
-                        @Html.DisplayFor(modelItem => item.Year)
-                    </td>
-                </tr>
-                <tr >
-                    <td>
-                        @Html.DisplayNameFor(modelItem => item.Price):
-                        @Html.DisplayFor(modelItem => item.Price)$
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
-         }
+            <div class="col">
+                <table class="table-borderless">
+                    <tbody>
+                        <tr>
+                            <td>
+                                <div><img src=@item.PhotoUrl width="200" height="200"></div>
+                                @Html.DisplayFor(modelItem => item.Producer.Name)
+                                @Html.DisplayFor(modelItem => item.Model)
+                                @Html.DisplayFor(modelItem => item.Year)
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                @Html.DisplayNameFor(modelItem => item.Price):
+                                @Html.DisplayFor(modelItem => item.Price)$
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <a asp-action="Details" asp-route-id="@item.CarId"><i class="fas fa-info-circle"></i></a> | 
+                                <a asp-action="Edit" asp-route-id="@item.CarId"><i class="fas fa-edit"></i></a> | 
+                                <a asp-action="Delete" asp-route-id="@item.CarId"><i class="far fa-trash-alt"></i></a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        }
     </div>
 </div>

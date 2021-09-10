@@ -40,8 +40,7 @@
                 </dd>
             </dl>
             <div>
-                <a asp-action="Edit" asp-route-id="@Model.CarId">Edit</a> |
-                <a asp-action="Index">Back to List</a>
+                <a asp-action="Index"><i class="fas fa-list-ul"></i> Back to List</a>
             </div>
         </div>
         <div class="col">
@@ -66,7 +65,7 @@
                 </dd>
             </dl>
             <div>
-                <a asp-action="Details" asp-controller="Producer" asp-route-id="@Model.ProducerId">Details</a>
+                <a asp-action="Details" asp-controller="Producer" asp-route-id="@Model.ProducerId"><i class="fas fa-info-circle"></i> Details</a>
             </div>
         </div>
     </div>
