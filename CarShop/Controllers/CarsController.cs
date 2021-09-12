@@ -59,8 +59,8 @@ namespace CarShop.Controllers
         public IActionResult Create()
         {
             ViewData["CategoryId"] = new SelectList(_context.Categories, "CategoryId", "Name");
-            ViewData["OrderId"] = new SelectList(_context.Orders, "OrderId", "Address");
-            ViewData["ProducerId"] = new SelectList(_context.Producers, "ProducerId", "Country");
+            ViewData["OrderId"] = new SelectList(_context.Orders, "OrderId", "CustomerFullName");
+            ViewData["ProducerId"] = new SelectList(_context.Producers, "ProducerId", "Name");
             return View();
         }
 
@@ -75,8 +75,8 @@ namespace CarShop.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["CategoryId"] = new SelectList(_context.Categories, "CategoryId", "Name", car.CategoryId);
-            ViewData["OrderId"] = new SelectList(_context.Orders, "OrderId", "Address", car.OrderId);
-            ViewData["ProducerId"] = new SelectList(_context.Producers, "ProducerId", "Country", car.ProducerId);
+            ViewData["OrderId"] = new SelectList(_context.Orders, "OrderId", "CustomerFullName", car.OrderId);
+            ViewData["ProducerId"] = new SelectList(_context.Producers, "ProducerId", "Name", car.ProducerId);
             return View(car);
         }
 
@@ -94,8 +94,8 @@ namespace CarShop.Controllers
                 return NotFound();
             }
             ViewData["CategoryId"] = new SelectList(_context.Categories, "CategoryId", "Name", car.CategoryId);
-            ViewData["OrderId"] = new SelectList(_context.Orders, "OrderId", "Address", car.OrderId);
-            ViewData["ProducerId"] = new SelectList(_context.Producers, "ProducerId", "Country", car.ProducerId);
+            ViewData["OrderId"] = new SelectList(_context.Orders, "OrderId", "CustomerFullName", car.OrderId);
+            ViewData["ProducerId"] = new SelectList(_context.Producers, "ProducerId", "Name", car.ProducerId);
             return View(car);
         }
 
@@ -131,8 +131,8 @@ namespace CarShop.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["CategoryId"] = new SelectList(_context.Categories, "CategoryId", "Name", car.CategoryId);
-            ViewData["OrderId"] = new SelectList(_context.Orders, "OrderId", "Address", car.OrderId);
-            ViewData["ProducerId"] = new SelectList(_context.Producers, "ProducerId", "Country", car.ProducerId);
+            ViewData["OrderId"] = new SelectList(_context.Orders, "OrderId", "CustomerFullName", car.OrderId);
+            ViewData["ProducerId"] = new SelectList(_context.Producers, "ProducerId", "Name", car.ProducerId);
             return View(car);
         }
 
