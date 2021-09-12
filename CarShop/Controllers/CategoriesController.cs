@@ -27,7 +27,7 @@ namespace CarShop.Controllers
         {
             return View(await _categoryRepo.GetCategories());
         }
-
+        
         [Route("api/Categories/AllCategories")]
         [HttpGet]
         public async Task<IEnumerable<Category>> AllCategories()
@@ -68,8 +68,7 @@ namespace CarShop.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(category);
-                await _context.SaveChangesAsync();
+                await _categoryRepo.AddCategory(category);
                 return RedirectToAction(nameof(Index));
             }
             return View(category);
@@ -96,9 +95,9 @@ namespace CarShop.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("CategoryId,Name")] Category category)
+        public async Task<IActionResult> Edit(int Categoryid, [Bind("CategoryId,Name")] Category category)
         {
-            if (id != category.CategoryId)
+            if (Categoryid != category.CategoryId)
             {
                 return NotFound();
             }
@@ -107,8 +106,9 @@ namespace CarShop.Controllers
             {
                 try
                 {
-                    _context.Update(category);
-                    await _context.SaveChangesAsync();
+                   await _categoryRepo.UpdateCategory(category);
+                    //_context.Update(category);
+                    //await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -145,13 +145,14 @@ namespace CarShop.Controllers
         }
 
         // POST: Categories/Delete/5
-        [HttpPost, ActionName("Delete")]
+        [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> Delete(int Categoryid)
         {
-            var category = await _context.Categories.FindAsync(id);
-            _context.Categories.Remove(category);
-            await _context.SaveChangesAsync();
+            //var category = await _context.Categories.FindAsync(id);
+            //_context.Categories.Remove(category);
+            //await _context.SaveChangesAsync();
+            await _categoryRepo.DeleteCategory(Categoryid);
             return RedirectToAction(nameof(Index));
         }
 
