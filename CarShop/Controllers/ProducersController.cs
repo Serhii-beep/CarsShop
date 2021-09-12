@@ -7,35 +7,27 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using CarShop;
 using CarShop.Repository;
-
 namespace CarShop.Controllers
 {
-    public class CategoriesController : Controller
+    public class ProducersController : Controller
     {
         private readonly DbCarShopContext _context;
 
-        private ICategoryRepository _categoryRepo;
+        private IProducerRepository _producerRepo;
 
-        public CategoriesController(DbCarShopContext context, ICategoryRepository categoryRepo)
+        public ProducersController(DbCarShopContext context, IProducerRepository producerRepository)
         {
             _context = context;
-            _categoryRepo = categoryRepo;
+            _producerRepo = producerRepository;
         }
 
-        // GET: Categories
+        // GET: Producers
         public async Task<IActionResult> Index()
         {
-            return View(await _categoryRepo.GetCategories());
-        }
-        
-        [Route("api/Categories/AllCategories")]
-        [HttpGet]
-        public async Task<IEnumerable<Category>> AllCategories()
-        {
-            return await _categoryRepo.GetCategories();
+            return View(await _producerRepo.GetProducers());
         }
 
-        // GET: Categories/Details/5
+        // GET: Producers/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -43,38 +35,38 @@ namespace CarShop.Controllers
                 return NotFound();
             }
 
-            var category = await _context.Categories
-                .FirstOrDefaultAsync(m => m.CategoryId == id);
-            if (category == null)
+            var producer = await _context.Producers
+                .FirstOrDefaultAsync(m => m.ProducerId == id);
+            if (producer == null)
             {
                 return NotFound();
             }
 
-            return View(category);
+            return View(producer);
         }
 
-        // GET: Categories/Create
+        // GET: Producers/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Categories/Create
+        // POST: Producers/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("CategoryId,Name")] Category category)
+        public async Task<IActionResult> Create([Bind("ProducerId,Name,Country,LogoUrl,Info")] Producer producer)
         {
             if (ModelState.IsValid)
             {
-                await _categoryRepo.AddCategory(category);
+                await _producerRepo.AddProducer(producer);
                 return RedirectToAction(nameof(Index));
             }
-            return View(category);
+            return View(producer);
         }
 
-        // GET: Categories/Edit/5
+        // GET: Producers/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -82,22 +74,22 @@ namespace CarShop.Controllers
                 return NotFound();
             }
 
-            var category = await _context.Categories.FindAsync(id);
-            if (category == null)
+            var producer = await _context.Producers.FindAsync(id);
+            if (producer == null)
             {
                 return NotFound();
             }
-            return View(category);
+            return View(producer);
         }
 
-        // POST: Categories/Edit/5
+        // POST: Producers/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int Categoryid, [Bind("CategoryId,Name")] Category category)
+        public async Task<IActionResult> Edit(int Producerid, [Bind("ProducerId,Name,Country,LogoUrl,Info")] Producer producer)
         {
-            if (Categoryid != category.CategoryId)
+            if (Producerid != producer.ProducerId)
             {
                 return NotFound();
             }
@@ -106,11 +98,11 @@ namespace CarShop.Controllers
             {
                 try
                 {
-                   await _categoryRepo.UpdateCategory(category);
+                    await _producerRepo.UpdateProducer(producer);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!CategoryExists(category.CategoryId))
+                    if (!ProducerExists(producer.ProducerId))
                     {
                         return NotFound();
                     }
@@ -121,10 +113,10 @@ namespace CarShop.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(category);
+            return View(producer);
         }
 
-        // GET: Categories/Delete/5
+        // GET: Producers/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -132,28 +124,31 @@ namespace CarShop.Controllers
                 return NotFound();
             }
 
-            var category = await _context.Categories
-                .FirstOrDefaultAsync(m => m.CategoryId == id);
-            if (category == null)
+            var producer = await _context.Producers
+                .FirstOrDefaultAsync(m => m.ProducerId == id);
+            if (producer == null)
             {
                 return NotFound();
             }
 
-            return View(category);
+            return View(producer);
         }
 
-        // POST: Categories/Delete/5
-        [HttpPost]
+        // POST: Producers/Delete/5
+        [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Delete(int Categoryid)
+        public async Task<IActionResult> DeleteConfirmed(int Producerid)
         {
-            await _categoryRepo.DeleteCategory(Categoryid);
+            //var producer = await _context.Producers.FindAsync(id);
+            //_context.Producers.Remove(producer);
+            //await _context.SaveChangesAsync();
+            await _producerRepo.DeleteProducer(Producerid);
             return RedirectToAction(nameof(Index));
         }
 
-        private bool CategoryExists(int id)
+        private bool ProducerExists(int id)
         {
-            return _context.Categories.Any(e => e.CategoryId == id);
+            return _context.Producers.Any(e => e.ProducerId == id);
         }
     }
 }
