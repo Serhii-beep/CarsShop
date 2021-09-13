@@ -5,27 +5,34 @@
 }
 
 <h1>Details</h1>
-
+<link rel="stylesheet" href="~/css/Text.css" />
 <div>
-        <h4>Producer</h4>
-        <hr />
-    <div class="container" style="margin: auto; width: 20%;  ">
+    <h4>Producer</h4>
+    <hr />
+    <div class="col">
         <div class="row">
-            <img src=@Model.LogoUrl style="display: block; margin-left: auto; margin-right: auto" />
+            <img src=@Model.LogoUrl style="display: block; margin-left: auto; margin-right: auto; width:200px; height: 200px" />
         </div>
-        <div class="row">
-            @Html.DisplayNameFor(model => model.Name)
-            @Html.DisplayFor(model => model.Name)
+        <div class="textContainer row">
+            <p class="text">
+                @Html.DisplayNameFor(model => model.Name)
+                @Html.DisplayFor(model => model.Name)
+            </p>
         </div>
-        <div class="row">
-            @Html.DisplayNameFor(model => model.Country)
-            @Html.DisplayFor(model => model.Country)
+        <div class="textContainer row">
+            <p class="text">
+                @Html.DisplayNameFor(model => model.Country)
+                @Html.DisplayFor(model => model.Country)
+            </p>
         </div>
-        <div class="row">
-            @Html.DisplayNameFor(model => model.Info)
-            @Html.DisplayFor(model => model.Info)
+        <div class="textContainer row">
+            <p class="text">
+                @Html.DisplayNameFor(model => model.Info)
+                @Html.DisplayFor(model => model.Info)
+            </p>
         </div>
     </div>
+    <hr />
     <div>
         <a asp-action="Edit" asp-route-id="@Model.ProducerId">Edit</a>
         @if (@ViewBag.CarId != null)
