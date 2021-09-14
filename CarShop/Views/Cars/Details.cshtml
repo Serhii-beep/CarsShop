@@ -8,7 +8,6 @@
 
 <h4>@Html.DisplayFor(model => model.Category.Name)</h4>
 
-
 <br />
 <div class="container">
     <div class="row row-cols-2">
@@ -65,7 +64,7 @@
                 </dd>
             </dl>
             <div>
-                <a asp-action="Details" asp-controller="Producers" asp-route-id="@Model.ProducerId"><i class="fas fa-info-circle"></i> Details</a>
+                 @Html.ActionLink("Details", "Details", "Producers", new { id = Model.ProducerId, CarId = Model.CarId }, new { @class = "fas fa-info-circle" })
             </div>
         </div>
     </div>
