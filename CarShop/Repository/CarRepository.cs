@@ -30,7 +30,8 @@ namespace CarShop.Repository
 
         public async Task<Car> FindCar(int id)
         {
-            Car car = await _context.Cars.Where(c => c.CarId == id).FirstOrDefaultAsync();
+            Car car = await _context.Cars.Where(c => c.CarId == id).Include(c => c.Category).Include(c => c.Producer).FirstOrDefaultAsync();
+            
             return car;
         }
 

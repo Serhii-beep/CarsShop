@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using CarShop.CustomValidationAttributes;
+using System.Text.Json.Serialization;
 
 #nullable disable
 
@@ -31,7 +32,9 @@ namespace CarShop
         public string Description { get; set; }
         public int? OrderId { get; set; }
 
+        [JsonIgnore]
         public virtual Category Category { get; set; }
+        [JsonIgnore]
         public virtual Order Order { get; set; }
         public virtual Producer Producer { get; set; }
     }

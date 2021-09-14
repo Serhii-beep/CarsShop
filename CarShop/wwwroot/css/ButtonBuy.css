@@ -1,0 +1,44 @@
+﻿
+.btn {
+    box-sizing: border-box;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    background-color: transparent;
+    border: 2px solid #f1c40f;
+    border-radius: 0.6em;
+    color: #f1c40f;
+    cursor: pointer;
+    -webkit-align-self: center;
+    -ms-flex-item-align: center;
+    align-self: center;
+    font-size: 1rem;
+    font-weight: 200;
+    line-height: 0.5;
+    margin: 10px;
+    margin-left: 20px;
+    padding: 0.6em 1.4em;
+    text-decoration: none;
+    text-align: center;
+    text-transform: uppercase;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 500;
+}
+
+    .btn:hover, .btn:focus {
+        color: #f1c40f;
+        outline: 0;
+    }
+
+.btn-buy {
+    border-color: #f1c40f;
+    color: #000;
+    box-shadow: 0 0 20px 20px #f1c40f inset, 0 0 0 0 #f1c40f;
+    -webkit-transition: all 150ms ease-in-out;
+    transition: all 150ms ease-in-out;
+}
+
+    .btn-buy:hover {
+        box-shadow: 0 0 5px 0 #f1c40f inset, 0 0 5px 2px #f1c40f;
+    }
+

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 #nullable disable
 
 namespace CarShop
@@ -23,7 +24,7 @@ namespace CarShop
         public string LogoUrl { get; set; }
         [Required(ErrorMessage = "Required field")]
         public string Info { get; set; }
-
+        [JsonIgnore]
         public virtual ICollection<Car> Cars { get; set; }
     }
 }
