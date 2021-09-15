@@ -1,0 +1,38 @@
+﻿#button {
+    display: inline-block;
+    background-color: #FF9800;
+    width: 70px;
+    height: 70px;
+    text-align: center;
+    border-radius: 50%;
+    position: fixed;
+    bottom: 50px;
+    right: 50px;
+    transition: background-color .3s, opacity .5s, visibility .5s;
+    opacity: 1;
+    z-index: 1000;
+}
+
+a img {
+    display: inline-block;
+    margin-right: 4px;
+    margin-top: 18px;
+    font-size: 36px;
+}
+
+    #button::after {
+        font-weight: normal;
+        font-style: normal;
+        font-size: 2em;
+        line-height: 50px;
+        color: #fff;
+    }
+
+#button:hover {
+    cursor: pointer;
+    box-shadow: 0 0 50px 20px #cca300;
+}
+
+#button:active {
+    background-color: #806600;
+}

@@ -4,12 +4,14 @@
     ViewData["Title"] = "Index";
 }
 <link rel="stylesheet" href="~/css/ButtonBuy.css" />
+<link rel="stylesheet" href="~/css/cartButton.css" />
 <h1>Index</h1>
 
 <p>
     <a asp-action="Create"><i class="fas fa-plus-square"></i> Create New</a>
 </p>
 
+<a id="button" asp-action="Index" asp-controller="Cart" asp-route-returnUrl="@ViewBag.Path"><img src="~/images/icons/shopping-cart.png"/></a>
 
 <div class="container">
         <div class="row row-cols-4">

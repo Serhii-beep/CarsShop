@@ -48,9 +48,19 @@ namespace CarShop.Controllers
             Car car = await _carRepo.FindCar(carId);
             if(car != null)
             {
-                GetCart().RemoveCar(car);
+                Cart oldCart = GetCart();
+                oldCart.RemoveCar(car);
+                this.HttpContext.Session.SetString("Cart", JsonSerializer.Serialize(oldCart));
             }
             return RedirectToAction("Index", new { returnUrl });
+        }
+
+        public RedirectToActionResult Clear(string returnUrl)
+        {
+            Cart oldCart = GetCart();
+            oldCart.Clear();
+            this.HttpContext.Session.SetString("Cart", JsonSerializer.Serialize(oldCart));
+            return RedirectToAction("Index", new { returnUrl = returnUrl });
         }
 
         public Cart GetCart()

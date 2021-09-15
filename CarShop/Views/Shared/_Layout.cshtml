@@ -19,10 +19,11 @@
                         <a asp-controller="Cars" asp-action="Index" asp-route-categoryId="null">Car Shop</a>
                     </div>
                 </div>
+                <li><a asp-controller="Categories" asp-action="Index"><i class="fas fa-cog"></i> Manage categories</a></li>
+                <li><a asp-controller="Producers" asp-action="Index"><i class="fas fa-cog"></i> Manage producers</a></li>
                 <li class="dropdown">
                     <a id="categoriesButton" href="#" class="dropdown-toggle" data-toggle="dropdown">Categories <span class="caret"></span></a>
                     <ul id="categories" class="dropdown-menu animated fadeInLeft" role="menu">
-                        <li><a asp-controller="Categories" asp-action="Index"><i class="fas fa-cog"></i> Manage categories</a></li>
                     </ul>
                 </li>
             </ul>
