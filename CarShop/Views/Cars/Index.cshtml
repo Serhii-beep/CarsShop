@@ -3,9 +3,9 @@
 @{
     ViewData["Title"] = "Index";
 }
-<link rel="stylesheet" href="~/css/ButtonBuy.css" 
-      
-      />
+<link rel="stylesheet" href="~/css/ButtonBuy.css" />
+<link rel="stylesheet" href="~/css/cartButton.css" />
+
 @if (ViewBag.CategoryName != null)
 {
     <h1>@ViewBag.CategoryName</h1>
@@ -15,50 +15,50 @@ else
     <h1>Transport</h1>
 }
 
-
 <p>
     <a asp-action="Create"><i class="fas fa-plus-square"></i> Create New</a>
 </p>
 
+<a id="button" asp-action="Index" asp-controller="Cart" asp-route-returnUrl="@ViewBag.Path"><img src="~/images/icons/shopping-cart.png" /></a>
 
 <div class="container">
-        <div class="row row-cols-4">
-            @foreach (var item in Model)
-            {
-                <div class="col">
-                    <table class="table-borderless">
-                        <tbody>
-                            <tr>
-                                <td>
-                                    <div><img src=@item.PhotoUrl width="200" height="200"></div>
-                                    @Html.DisplayFor(modelItem => item.Producer.Name)
-                                    @Html.DisplayFor(modelItem => item.Model)
-                                    @Html.DisplayFor(modelItem => item.Year)
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    @Html.DisplayNameFor(modelItem => item.Price):
-                                    @Html.DisplayFor(modelItem => item.Price)$
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <a asp-action="Details" asp-route-id="@item.CarId"><i class="fas fa-info-circle"></i></a> |
-                                    <a asp-action="Edit" asp-route-id="@item.CarId"><i class="fas fa-edit"></i></a> |
-                                    <a asp-action="Delete" asp-route-id="@item.CarId"><i class="far fa-trash-alt"></i></a>
-                                    @using (Html.BeginForm("AddToCart", "Cart", new { carId = item.CarId }))
-                                    {
-                                        <div class="pull-right">
-                                            @Html.Hidden("returnUrl", (string)ViewBag.Path)
-                                            <input type="submit" class="btn btn-buy" value="Add to Cart" />
-                                        </div>
-                                    }
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            }
-        </div>
+    <div class="row row-cols-4">
+        @foreach (var item in Model)
+        {
+            <div class="col">
+                <table class="table-borderless">
+                    <tbody>
+                        <tr>
+                            <td>
+                                <div><img src=@item.PhotoUrl width="200" height="200"></div>
+                                @Html.DisplayFor(modelItem => item.Producer.Name)
+                                @Html.DisplayFor(modelItem => item.Model)
+                                @Html.DisplayFor(modelItem => item.Year)
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                @Html.DisplayNameFor(modelItem => item.Price):
+                                @Html.DisplayFor(modelItem => item.Price)$
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <a asp-action="Details" asp-route-id="@item.CarId"><i class="fas fa-info-circle"></i></a> |
+                                <a asp-action="Edit" asp-route-id="@item.CarId"><i class="fas fa-edit"></i></a> |
+                                <a asp-action="Delete" asp-route-id="@item.CarId"><i class="far fa-trash-alt"></i></a>
+                                @using (Html.BeginForm("AddToCart", "Cart", new { carId = item.CarId }))
+                                {
+                                    <div class="pull-right">
+                                        @Html.Hidden("returnUrl", (string)ViewBag.Path)
+                                        <input type="submit" class="btn btn-buy" value="Add to Cart" />
+                                    </div>
+                                }
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        }
     </div>
+</div>

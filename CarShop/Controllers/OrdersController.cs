@@ -6,16 +6,20 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using CarShop;
+using CarShop.Models;
+using CarShop.Repository;
 
 namespace CarShop.Controllers
 {
     public class OrdersController : Controller
     {
         private readonly DbCarShopContext _context;
+        private ICarRepository _carRepo;
 
-        public OrdersController(DbCarShopContext context)
+        public OrdersController(DbCarShopContext context, ICarRepository carRepo)
         {
             _context = context;
+            _carRepo = carRepo;
         }
 
         // GET: Orders
@@ -43,8 +47,9 @@ namespace CarShop.Controllers
         }
 
         // GET: Orders/Create
-        public IActionResult Create()
+        public IActionResult Create(List<CartItem> orderedCars)
         {
+            ViewBag.Cars = orderedCars;
             return View();
         }
 
@@ -53,13 +58,14 @@ namespace CarShop.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("OrderId,CustomerFullName,Address")] Order order)
+        public async Task<IActionResult> Create(List<CartItem> orderedCars, [Bind("OrderId,CustomerFullName,Address")] Order order)
         {
             if (ModelState.IsValid)
             {
                 _context.Add(order);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                await AddOrdersToCars(orderedCars, order.OrderId);
+                return RedirectToAction("Index", "Cars");
             }
             return View(order);
         }
@@ -147,6 +153,15 @@ namespace CarShop.Controllers
         private bool OrderExists(int id)
         {
             return _context.Orders.Any(e => e.OrderId == id);
+        }
+
+        private async Task AddOrdersToCars(List<CartItem> orderedCars, int orderId)
+        {
+            foreach(var item in orderedCars)
+            {
+                Car car = await _carRepo.FindCar(item.car.CarId);
+                car.OrderId = orderId;
+            }
         }
     }
 }

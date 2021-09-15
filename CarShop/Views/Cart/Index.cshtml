@@ -4,6 +4,7 @@
         <table class="table">
             <thead>
                 <tr>
+                    <th></th>
                     <th>Car</th>
                     <th class="text-right">Price</th>
                 </tr>
@@ -12,6 +13,7 @@
                 @foreach(var item in Model.Cart.CartItems)
                     {
                         <tr>
+                            <td class="text-left"><a asp-action="RemoveFromCart" asp-controller="Cart" asp-route-carId="@item.car.CarId" asp-route-returnUrl="@Model.ReturnUrl">&times;</a></td>
                             <td class="text-left">@item.car.Producer.Name @item.car.Model @item.car.Year</td>
                             <td class="text-right">@item.car.Price $</td>
                         </tr>
@@ -25,6 +27,10 @@
             </tfoot>
         </table>
 
-        <div class="text-right">
+        <div>
+            <a class="btn btn-primary" asp-action="Clear" asp-controller="Cart" asp-route-returnUrl="@Model.ReturnUrl">Clear</a>
             <a class="btn btn-primary" href="@Model.ReturnUrl">Back to cars</a>
+            <a id="toOrder" class="btn btn-primary" asp-action="Create" asp-controller="Orders" asp-route-orderedCars="@Model.Cart.CartItems">Buy</a>
         </div>
+
+
