@@ -24,6 +24,7 @@ namespace CarShop.Controllers
         // GET: Cars
         public async Task<IActionResult> Index(int? categoryId)
         {
+            ViewBag.Path = HttpContext.Request.Path + HttpContext.Request.QueryString;
             if (categoryId == null)
             {
                 return View(await _carRepo.GetAllCars());
