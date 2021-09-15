@@ -30,6 +30,7 @@ namespace CarShop.Controllers
             }
             else
             {
+                ViewBag.CategoryName = _context.Categories.FirstOrDefault(a => a.CategoryId == categoryId).Name;
                 return View(await _carRepo.GetAllCarsByCategory((int)categoryId));
             }
         }
