@@ -1,4 +1,6 @@
 ﻿@model CarShop.ViewModels.CartViewModel
+@using System.Text.Json.Serialization
+@using System.Text.Json
 
     <h2>Cart</h2>
         <table class="table">
@@ -22,7 +24,7 @@
             <tfoot>
                 <tr>
                     <td colspan="3" class="text-right">Total:</td>
-                    <td class="text-right">@Model.Cart.TotalPrice()</td>
+                    <td class="text-right">@Model.Cart.TotalPrice() $</td>
                 </tr>
             </tfoot>
         </table>
@@ -30,7 +32,7 @@
         <div>
             <a class="btn btn-primary" asp-action="Clear" asp-controller="Cart" asp-route-returnUrl="@Model.ReturnUrl">Clear</a>
             <a class="btn btn-primary" href="@Model.ReturnUrl">Back to cars</a>
-            <a id="toOrder" class="btn btn-primary" asp-action="Create" asp-controller="Orders" asp-route-orderedCars="@Model.Cart.CartItems">Buy</a>
+            <a id="toOrder" class="btn btn-primary" asp-action="Create" asp-controller="Orders" asp-route-orderedCars="@JsonSerializer.Serialize(Model.Cart.CartItems)">Buy</a>
         </div>
 
 
