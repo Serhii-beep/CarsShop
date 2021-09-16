@@ -91,9 +91,9 @@ namespace CarShop.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("OrderId,CustomerFullName,Address")] Order order)
+        public async Task<IActionResult> Edit(int Orderid, [Bind("OrderId,CustomerFullName,Address")] Order order)
         {
-            if (id != order.OrderId)
+            if (Orderid != order.OrderId)
             {
                 return NotFound();
             }
@@ -142,9 +142,9 @@ namespace CarShop.Controllers
         // POST: Orders/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(int Orderid)
         {
-            var order = await _context.Orders.FindAsync(id);
+            var order = await _context.Orders.FindAsync(Orderid);
             _context.Orders.Remove(order);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
