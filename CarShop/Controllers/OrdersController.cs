@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using CarShop;
 using CarShop.Models;
 using CarShop.Repository;
+using System.Text.Json;
 
 namespace CarShop.Controllers
 {
@@ -47,7 +48,7 @@ namespace CarShop.Controllers
         }
 
         // GET: Orders/Create
-        public IActionResult Create(List<CartItem> orderedCars)
+        public IActionResult Create(string orderedCars)
         {
             ViewBag.Cars = orderedCars;
             return View();
@@ -58,13 +59,14 @@ namespace CarShop.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(List<CartItem> orderedCars, [Bind("OrderId,CustomerFullName,Address")] Order order)
+        public async Task<IActionResult> Create(string orderedCars, [Bind("OrderId,CustomerFullName,Address")] Order order)
         {
+            List<CartItem> cars = JsonSerializer.Deserialize<List<CartItem>>(orderedCars);
             if (ModelState.IsValid)
             {
                 _context.Add(order);
                 await _context.SaveChangesAsync();
-                await AddOrdersToCars(orderedCars, order.OrderId);
+                await AddOrdersToCars(cars, order.OrderId);
                 return RedirectToAction("Index", "Cars");
             }
             return View(order);
@@ -162,6 +164,7 @@ namespace CarShop.Controllers
                 Car car = await _carRepo.FindCar(item.car.CarId);
                 car.OrderId = orderId;
             }
+            await _context.SaveChangesAsync();
         }
     }
 }
