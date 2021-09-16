@@ -6,7 +6,13 @@
 
 <h1>Create</h1>
 
-<h4>Car</h4>
+@if (ViewBag.catId != null)
+{
+    <h4>@ViewBag.categoryName</h4>
+}
+else { 
+    <h4>Car</h4>
+    }
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -19,7 +25,10 @@
             </div>
             <div class="form-group">
                 <label asp-for="CategoryId" class="control-label"></label>
-                <select asp-for="CategoryId" class ="form-control" asp-items="ViewBag.CategoryId"></select>
+                <select asp-for="CategoryId" class="form-control" asp-items="ViewBag.CategoryId">
+                    @if (ViewBag.catId != null)
+                    {<option selected=@ViewBag.catId hidden="hidden"></option>}
+                </select>
             </div>
             <div class="form-group">
                 <label asp-for="Price" class="control-label"></label>
@@ -33,7 +42,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="ProducerId" class="control-label"></label>
-                <select asp-for="ProducerId" class ="form-control" asp-items="ViewBag.ProducerId"></select>
+                <select asp-for="ProducerId" class="form-control" asp-items="ViewBag.ProducerId"></select>
             </div>
             <div class="form-group">
                 <label asp-for="PhotoUrl" class="control-label"></label>
