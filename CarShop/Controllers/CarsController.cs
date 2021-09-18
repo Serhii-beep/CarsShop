@@ -22,8 +22,9 @@ namespace CarShop.Controllers
         }
 
         // GET: Cars
-        public async Task<IActionResult> Index(int? categoryId)
+        public async Task<IActionResult> Index(int? categoryId, int? minPrice, int? maxPrice, int? producerId, int? year)
         {
+            ViewData["ProducerId"] = new SelectList(_context.Producers, "ProducerId", "Name");
             ViewBag.categoryId = categoryId;
             ViewBag.Path = HttpContext.Request.Path + HttpContext.Request.QueryString;
             IEnumerable<Car> cars = await _carRepo.GetAllCars();

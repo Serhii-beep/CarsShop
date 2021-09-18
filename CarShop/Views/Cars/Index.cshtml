@@ -6,6 +6,32 @@
 <link rel="stylesheet" href="~/css/ButtonBuy.css" />
 <link rel="stylesheet" href="~/css/cartButton.css" />
 <link rel="stylesheet" href="~/css/card.css" />
+<link rel="stylesheet" href="~/css/contentFilters.css" />
+
+<form method="get">
+    <div class="form-inline form-group">
+        <span>
+            <input type="number" name="minPrice" />
+            <span class="bar"></span>
+            <label>Minimum price</label>
+        </span>
+        <span>
+            <input type="number" name="maxPrice" />
+            <span class="bar"></span>
+            <label>Maximum price</label>
+        </span>
+        <span>
+            <label class="control-label">Producer: </label>
+            <select name="producerId" asp-items="ViewBag.ProducerId" class="form-control"></select>
+        </span>
+        <span>
+            <input type="number" name="year" />
+            <label>Year</label>
+        </span>
+
+        <input type="submit" value="Filter" class="btn btn-primary" />
+    </div> 
+</form>
 
 
 @if (ViewBag.CategoryName != null)
@@ -23,7 +49,7 @@ else
 
 <a id="button" asp-action="Index" asp-controller="Cart" asp-route-returnUrl="@ViewBag.Path"><img src="~/images/icons/shopping-cart.png" /></a>
 
-<main class="cards">
+<main class="cards row-3">
     @foreach (var item in Model)
     {
         <div class="card">
@@ -34,7 +60,7 @@ else
                             <img src="@item.PhotoUrl" height="150" />
                             <div class="text">
                                 <h4>@item.Producer.Name @item.Model @item.Year</h4>
-                                <h6>@item.Price$ </h6>
+                                <h6>@Html.DisplayNameFor(item => item.Price): @item.Price$ </h6>
                             </div>
                         </td>
                     </tr>
