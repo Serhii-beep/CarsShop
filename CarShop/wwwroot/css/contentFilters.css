@@ -1,0 +1,24 @@
+﻿input {
+    background: none;
+    font-size: 18px;
+    padding: 10px 10px 10px 5px;
+    width: 120px;
+    border: none;
+    border-bottom: 1px solid #c6c6c6;
+}
+
+input:focus {
+    outline: none;
+}
+
+input:focus ~ label {
+    top: -14px;
+    font-size: 12px;
+}
+
+label {
+    color: #c6c6c6;
+    font-size: 16px;
+    font-weight: normal;
+    position: absolute;
+}
