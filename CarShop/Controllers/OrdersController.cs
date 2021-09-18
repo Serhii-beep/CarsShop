@@ -48,8 +48,9 @@ namespace CarShop.Controllers
         }
 
         // GET: Orders/Create
-        public IActionResult Create(string orderedCars)
+        public IActionResult Create(string orderedCars, string returnUrl)
         {
+            ViewBag.returnUrl = returnUrl;
             ViewBag.Cars = orderedCars;
             return View();
         }

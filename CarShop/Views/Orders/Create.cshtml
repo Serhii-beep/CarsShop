@@ -31,7 +31,15 @@
 </div>
 
 <div>
-    <a asp-action="Index" >Back to List</a>
+    @if (ViewBag.returnUrl != null)
+    {
+        <a asp-action="Index" asp-controller="Cart" asp-route-returnUrl="@ViewBag.returnUrl">Back to Cart</a>
+    }
+    else
+    {
+        <a asp-action="Index">Back to List</a>
+    }
+
 </div>
 
 @section Scripts {

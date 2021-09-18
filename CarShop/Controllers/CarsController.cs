@@ -39,8 +39,10 @@ namespace CarShop.Controllers
         }
 
         // GET: Cars/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(int? id, int? categoryId)
         {
+            ViewBag.Path = HttpContext.Request.Path + HttpContext.Request.QueryString;
+            ViewBag.categoryId = categoryId;
             if (id == null)
             {
                 return NotFound();
@@ -60,7 +62,7 @@ namespace CarShop.Controllers
         }
 
         // GET: Cars/Create
-        public IActionResult Create(int? categoryId  = null)
+        public IActionResult Create(int? categoryId)
         {
             ViewBag.catId = categoryId;
             if (categoryId != null)
@@ -77,12 +79,12 @@ namespace CarShop.Controllers
         // POST: Cars/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("CarId,Model,CategoryId,Price,Year,ProducerId,PhotoUrl,Description,OrderId")] Car car)
+        public async Task<IActionResult> Create(int? catId, [Bind("CarId,Model,CategoryId,Price,Year,ProducerId,PhotoUrl,Description,OrderId")] Car car)
         {
             if (ModelState.IsValid)
             {
                 await _carRepo.AddCar(car);
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Index), new { categoryId = catId });
             }
             ViewData["CategoryId"] = new SelectList(_context.Categories, "CategoryId", "Name", car.CategoryId);
             ViewData["OrderId"] = new SelectList(_context.Orders, "OrderId", "CustomerFullName", car.OrderId);
@@ -91,8 +93,9 @@ namespace CarShop.Controllers
         }
 
         // GET: Cars/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public async Task<IActionResult> Edit(int? id, int? categoryId)
         {
+            ViewBag.catId = categoryId;
             if (id == null)
             {
                 return NotFound();
@@ -114,7 +117,7 @@ namespace CarShop.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int CarId, [Bind("CarId,Model,CategoryId,Price,Year,ProducerId,PhotoUrl,Description,OrderId")] Car car)
+        public async Task<IActionResult> Edit(int CarId, int? catId, [Bind("CarId,Model,CategoryId,Price,Year,ProducerId,PhotoUrl,Description,OrderId")] Car car)
         {
             if (CarId != car.CarId)
             {
@@ -138,7 +141,7 @@ namespace CarShop.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Index), new { categoryId = catId});
             }
             ViewData["CategoryId"] = new SelectList(_context.Categories, "CategoryId", "Name", car.CategoryId);
             ViewData["OrderId"] = new SelectList(_context.Orders, "OrderId", "CustomerFullName", car.OrderId);
@@ -147,8 +150,9 @@ namespace CarShop.Controllers
         }
 
         // GET: Cars/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public async Task<IActionResult> Delete(int? id, int? categoryId)
         {
+            ViewBag.categoryId = categoryId;
             if (id == null)
             {
                 return NotFound();
@@ -170,10 +174,10 @@ namespace CarShop.Controllers
         // POST: Cars/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int CarId)
+        public async Task<IActionResult> DeleteConfirmed(int CarId, int? categoryId)
         {
             await _carRepo.DeleteCar(CarId);
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(Index), new { categoryId});
         }
 
         private bool CarExists(int id)

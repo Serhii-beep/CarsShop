@@ -5,12 +5,11 @@
 }
 
 <h1>Edit</h1>
-
-<h4>Car</h4>
+@ViewBag.catId
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Edit" method="post">
+        <form asp-action="Edit" method="post" asp-route-catId="@ViewBag.catId">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="CarId" />
             <div class="form-group">
@@ -56,7 +55,7 @@
 </div>
     
 <div>
-    <a asp-action="Index"><i class="fas fa-list-ul"></i> Back to List</a>
+    <a asp-action="Index" asp-route-categoryId="@ViewBag.catId"><i class="fas fa-list-ul"></i> Back to List</a>
 </div>
 
 @section Scripts {
