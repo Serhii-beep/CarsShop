@@ -26,14 +26,15 @@ namespace CarShop.Controllers
         {
             ViewBag.categoryId = categoryId;
             ViewBag.Path = HttpContext.Request.Path + HttpContext.Request.QueryString;
+            IEnumerable<Car> cars = await _carRepo.GetAllCars();
             if (categoryId == null)
             {
-                return View(await _carRepo.GetAllCars());
+                return View(cars);
             }
             else
             {
                 ViewBag.CategoryName = _context.Categories.FirstOrDefault(a => a.CategoryId == categoryId).Name;
-                return View(await _carRepo.GetAllCarsByCategory((int)categoryId));
+                return View(cars.Where(c=>c.CategoryId == categoryId));
             }
         }
 

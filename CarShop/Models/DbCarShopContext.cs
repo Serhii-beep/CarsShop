@@ -36,6 +36,7 @@ namespace CarShop
         {
             modelBuilder.HasAnnotation("Relational:Collation", "Cyrillic_General_CI_AS");
 
+            modelBuilder.Entity<Car>().HasQueryFilter(b => b.OrderId == null);
             modelBuilder.Entity<Car>(entity =>
             {
                 entity.Property(e => e.Description).IsRequired();
