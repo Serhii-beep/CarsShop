@@ -29,6 +29,7 @@ a img {
     }
 
 #button:hover {
+    transition: 850ms ease all;
     cursor: pointer;
     box-shadow: 0 0 50px 20px #cca300;
 }
