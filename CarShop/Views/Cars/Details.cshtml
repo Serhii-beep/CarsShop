@@ -39,7 +39,7 @@
                 </dd>
             </dl>
             <div>
-                <a asp-action="Index"><i class="fas fa-list-ul"></i> Back to List</a>
+                <a asp-action="Index" asp-route-categoryId="@ViewBag.categoryId"><i class="fas fa-list-ul"></i> Back</a>
             </div>
         </div>
         <div class="col">
@@ -64,7 +64,7 @@
                 </dd>
             </dl>
             <div>
-                @Html.ActionLink("Details", "Details", "Producers", new { id = Model.ProducerId, CarId = Model.CarId }, new { @class = "fas fa-info-circle" })
+                @Html.ActionLink("Details", "Details", "Producers", new { id = Model.ProducerId, CarId = Model.CarId, returnUrl = (string)ViewBag.Path}, new { @class = "fas fa-info-circle" })
             </div>
         </div>
     </div>

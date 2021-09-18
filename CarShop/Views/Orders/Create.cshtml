@@ -14,12 +14,12 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="CustomerFullName" class="control-label"></label>
-                <input asp-for="CustomerFullName" class="form-control" />
+                <input asp-for="CustomerFullName" class="form-control" autocomplete="off"/>
                 <span asp-validation-for="CustomerFullName" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Address" class="control-label"></label>
-                <input asp-for="Address" class="form-control" />
+                <input asp-for="Address" class="form-control" autocomplete="off"/>
                 <span asp-validation-for="Address" class="text-danger"></span>
             </div>
             <input type="hidden" value="@ViewBag.Cars" name="orderedCars" />
@@ -31,7 +31,15 @@
 </div>
 
 <div>
-    <a asp-action="Index" >Back to List</a>
+    @if (ViewBag.returnUrl != null)
+    {
+        <a asp-action="Index" asp-controller="Cart" asp-route-returnUrl="@ViewBag.returnUrl">Back to Cart</a>
+    }
+    else
+    {
+        <a asp-action="Index">Back to List</a>
+    }
+
 </div>
 
 @section Scripts {
