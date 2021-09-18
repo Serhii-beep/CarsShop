@@ -18,7 +18,7 @@ else
 }
 
 <p>
-    <a asp-action="Create"><i class="fas fa-plus-square"></i> Create New</a>
+    <a asp-action="Create" asp-route-categoryId ="@ViewBag.categoryId"><i class="fas fa-plus-square"></i> Create New</a>
 </p>
 
 <a id="button" asp-action="Index" asp-controller="Cart" asp-route-returnUrl="@ViewBag.Path"><img src="~/images/icons/shopping-cart.png" /></a>

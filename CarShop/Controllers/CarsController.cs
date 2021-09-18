@@ -24,6 +24,7 @@ namespace CarShop.Controllers
         // GET: Cars
         public async Task<IActionResult> Index(int? categoryId)
         {
+            ViewBag.categoryId = categoryId;
             ViewBag.Path = HttpContext.Request.Path + HttpContext.Request.QueryString;
             if (categoryId == null)
             {
@@ -58,8 +59,14 @@ namespace CarShop.Controllers
         }
 
         // GET: Cars/Create
-        public IActionResult Create()
+        public IActionResult Create(int? categoryId  = null)
         {
+            ViewBag.catId = categoryId;
+            if (categoryId != null)
+            {
+                ViewBag.categoryName = _context.Categories.FirstOrDefault(a => a.CategoryId == categoryId).Name;
+            }
+
             ViewData["CategoryId"] = new SelectList(_context.Categories, "CategoryId", "Name");
             ViewData["OrderId"] = new SelectList(_context.Orders, "OrderId", "CustomerFullName");
             ViewData["ProducerId"] = new SelectList(_context.Producers, "ProducerId", "Name");
