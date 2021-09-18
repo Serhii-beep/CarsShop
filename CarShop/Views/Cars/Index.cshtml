@@ -31,16 +31,16 @@ else
                 <tbody>
                     <tr>
                         <td>
-                            <img src="@item.PhotoUrl" />
+                            <img src="@item.PhotoUrl" height="150" />
                             <div class="text">
                                 <h4>@item.Producer.Name @item.Model @item.Year</h4>
-                                <h3>@item.Price$ </h3>
+                                <h6>@item.Price$ </h6>
                             </div>
                         </td>
                     </tr>
                     <tr>
                         <td>
-                            <div id="detailsEditDelete">
+                            <div style="text-align: center;">
                                 <a asp-action="Details" asp-route-id="@item.CarId"><i class="fas fa-info-circle"></i></a> |
                                 <a asp-action="Edit" asp-route-id="@item.CarId"><i class="fas fa-edit"></i></a> |
                                 <a asp-action="Delete" asp-route-id="@item.CarId"><i class="far fa-trash-alt"></i></a>

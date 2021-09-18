@@ -20,6 +20,10 @@
         padding: 0 20px 20px;
     }
 
-#detailsEditDelete, a{
-    margin: auto;
+table {
+    height: 100%;
+}
+
+i {
+    font-size: 20px;
 }
