@@ -32,7 +32,10 @@
         <div>
             <a class="btn btn-primary" asp-action="Clear" asp-controller="Cart" asp-route-returnUrl="@Model.ReturnUrl">Clear</a>
             <a class="btn btn-primary" href="@Model.ReturnUrl">Back to cars</a>
-            <a id="toOrder" class="btn btn-primary" asp-action="Create" asp-controller="Orders" asp-route-orderedCars="@JsonSerializer.Serialize(Model.Cart.CartItems)">Buy</a>
+            @if (Model.Cart.CartItems.Count != 0)
+            {
+                <a id="toOrder" class="btn btn-primary" asp-action="Create" asp-controller="Orders" asp-route-orderedCars="@JsonSerializer.Serialize(Model.Cart.CartItems)">Buy</a>
+            }
         </div>
 
 
