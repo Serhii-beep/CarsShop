@@ -22,7 +22,9 @@
         </span>
         <span>
             <label class="control-label">Producer: </label>
-            <select name="producerId" asp-items="ViewBag.ProducerId" class="form-control"></select>
+            <select name="producerId" asp-items="ViewBag.ProducerId" class="form-control">
+                <option value="null">~</option>
+            </select>
         </span>
         <span>
             <input type="number" name="year" />

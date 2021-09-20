@@ -6,35 +6,36 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using CarShop;
-using CarShop.Repository;
 
 namespace CarShop.Controllers
 {
     public class CarsController : Controller
     {
         private readonly DbCarShopContext _context;
-        private ICarRepository _carRepo;
-
-        public CarsController(DbCarShopContext context, ICarRepository carRepo)
+        public CarsController(DbCarShopContext context)
         {
             _context = context;
-            _carRepo = carRepo;
+
         }
 
         // GET: Cars
         public async Task<IActionResult> Index(int? categoryId, int? minPrice, int? maxPrice, int? producerId, int? year)
         {
             ViewData["ProducerId"] = new SelectList(_context.Producers, "ProducerId", "Name");
+
             ViewBag.categoryId = categoryId;
             ViewBag.Path = HttpContext.Request.Path + HttpContext.Request.QueryString;
-            IEnumerable<Car> cars = await _carRepo.GetAllCars();
+
+            IEnumerable<Car> cars = await _context.Cars.Include(c => c.Producer).ToListAsync();
+            cars = GetFiltredCars(cars, minPrice, maxPrice, producerId, year);
+
             if (categoryId == null)
             {
                 return View(cars);
             }
             else
             {
-                ViewBag.CategoryName = _context.Categories.FirstOrDefault(a => a.CategoryId == categoryId).Name;
+                ViewBag.CategoryName = _context.Categories.Find(categoryId).Name;
                 return View(cars.Where(c=>c.CategoryId == categoryId));
             }
         }
@@ -49,11 +50,7 @@ namespace CarShop.Controllers
                 return NotFound();
             }
 
-            var car = await _context.Cars
-                .Include(c => c.Category)
-                .Include(c => c.Order)
-                .Include(c => c.Producer)
-                .FirstOrDefaultAsync(m => m.CarId == id);
+            var car = await _context.Cars.Where(c => c.CarId == id).Include(c => c.Category).Include(c => c.Producer).FirstOrDefaultAsync();
             if (car == null)
             {
                 return NotFound();
@@ -68,7 +65,7 @@ namespace CarShop.Controllers
             ViewBag.catId = categoryId;
             if (categoryId != null)
             {
-                ViewBag.categoryName = _context.Categories.FirstOrDefault(a => a.CategoryId == categoryId).Name;
+                ViewBag.categoryName = _context.Categories.Find(categoryId).Name;
             }
 
             ViewData["CategoryId"] = new SelectList(_context.Categories, "CategoryId", "Name");
@@ -84,7 +81,15 @@ namespace CarShop.Controllers
         {
             if (ModelState.IsValid)
             {
-                await _carRepo.AddCar(car);
+                try
+                {
+                    _context.Add(car);
+                    await _context.SaveChangesAsync();
+                }
+                catch (Exception)
+                {
+                    throw;
+                }
                 return RedirectToAction(nameof(Index), new { categoryId = catId });
             }
             ViewData["CategoryId"] = new SelectList(_context.Categories, "CategoryId", "Name", car.CategoryId);
@@ -102,7 +107,8 @@ namespace CarShop.Controllers
                 return NotFound();
             }
 
-            var car = await _carRepo.FindCar((int)id);
+            var car = await _context.Cars.Where(c => c.CarId == id).Include(c => c.Category).Include(c => c.Producer).FirstOrDefaultAsync();
+
             if (car == null)
             {
                 return NotFound();
@@ -129,7 +135,8 @@ namespace CarShop.Controllers
             {
                 try
                 {
-                    await _carRepo.UpdateCar(car);
+                    _context.Update(car);
+                    await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -159,11 +166,8 @@ namespace CarShop.Controllers
                 return NotFound();
             }
 
-            var car = await _context.Cars
-                .Include(c => c.Category)
-                .Include(c => c.Order)
-                .Include(c => c.Producer)
-                .FirstOrDefaultAsync(m => m.CarId == id);
+            var car = await _context.Cars.Where(c => c.CarId == id).Include(c => c.Category).Include(c => c.Producer).FirstOrDefaultAsync();
+
             if (car == null)
             {
                 return NotFound();
@@ -177,13 +181,37 @@ namespace CarShop.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int CarId, int? categoryId)
         {
-            await _carRepo.DeleteCar(CarId);
+            Car car = await _context.Cars.FindAsync(CarId);
+            _context.Cars.Remove(car);
+            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index), new { categoryId});
         }
 
         private bool CarExists(int id)
         {
             return _context.Cars.Any(e => e.CarId == id);
+        }
+
+        private IEnumerable<Car> GetFiltredCars(IEnumerable<Car> cars,int? minPrice, int? maxPrice, int? producerId, int? year)
+        {
+            if (producerId != null)
+            {
+                cars = cars.Where(c => c.ProducerId == producerId);
+            }
+            if (year != null)
+            {
+                cars = cars.Where(c => c.Year == year);
+            }
+            if (minPrice != null)
+            {
+                cars = cars.Where(c => c.Price >= minPrice);
+            }
+            if(maxPrice != null)
+            {
+                cars = cars.Where(c => c.Price <= maxPrice);
+            }
+
+            return cars;
         }
     }
 }
