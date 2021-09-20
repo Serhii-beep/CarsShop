@@ -27,7 +27,15 @@ namespace CarShop.Controllers
             ViewBag.Path = HttpContext.Request.Path + HttpContext.Request.QueryString;
 
             IEnumerable<Car> cars = await _context.Cars.Include(c => c.Producer).ToListAsync();
-            cars = GetFiltredCars(cars, minPrice, maxPrice, producerId, year);
+
+            if (minPrice > maxPrice)
+            {
+                ModelState.AddModelError("PriceError", "Max price less than min price");
+            }
+            else
+            {
+                cars = GetFiltredCars(cars, minPrice, maxPrice, producerId, year);
+            }
 
             if (categoryId == null)
             {

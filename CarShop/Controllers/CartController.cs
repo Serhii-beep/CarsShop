@@ -4,22 +4,22 @@ using Microsoft.AspNetCore.Session;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using CarShop.Repository;
 using CarShop.Models;
 using Microsoft.AspNetCore.Http;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using CarShop.ViewModels;
+using Microsoft.EntityFrameworkCore;
 
 namespace CarShop.Controllers
 {
     public class CartController : Controller
     {
-        private ICarRepository _carRepo;
+        private readonly DbCarShopContext _context;
 
-        public CartController(ICarRepository carRepo)
+        public CartController(DbCarShopContext context)
         {
-            _carRepo = carRepo;
+            _context = context;
         }
 
         public ViewResult Index(string returnUrl)
@@ -33,8 +33,8 @@ namespace CarShop.Controllers
         
         public async Task<RedirectToActionResult> AddToCart(int carId, string returnUrl)
         {
-            Car car = await _carRepo.FindCar(carId);
-            if(car != null)
+            Car car = await _context.Cars.Where(c => c.CarId == carId).Include(c => c.Category).Include(c => c.Producer).FirstOrDefaultAsync();
+            if (car != null)
             {
                 Cart oldCart = GetCart();
                 oldCart.AddCar(car);
@@ -45,8 +45,8 @@ namespace CarShop.Controllers
 
         public async Task<RedirectToActionResult> RemoveFromCart(int carId, string returnUrl)
         {
-            Car car = await _carRepo.FindCar(carId);
-            if(car != null)
+            Car car = await _context.Cars.Where(c => c.CarId == carId).Include(c => c.Category).Include(c => c.Producer).FirstOrDefaultAsync();
+            if (car != null)
             {
                 Cart oldCart = GetCart();
                 oldCart.RemoveCar(car);

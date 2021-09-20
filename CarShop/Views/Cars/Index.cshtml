@@ -22,7 +22,7 @@
         </span>
         <span>
             <select name="producerId" asp-items="ViewBag.ProducerId">
-            <option value="null">~</option>
+                <option value="null">~</option>
             </select>
             <span class="bar"></span>
             <label>Producer: </label>
@@ -36,7 +36,8 @@
         </span>
 
         <input type="submit" value="Filter" class="btn btn-primary" />
-    </div> 
+    </div>
+    @Html.ValidationMessage("PriceError")
 </form>
 
 
