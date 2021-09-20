@@ -1,24 +1,60 @@
-﻿input {
+﻿span > input {
+    background: none;
+    font-size: 18px;
+    padding: 10px 10px 10px 5px;
+    width: 120px;
+    border: none;
+    border-bottom: 1px solid #2196F3;
+}
+
+span > select {
     background: none;
     font-size: 18px;
     padding: 10px 10px 10px 5px;
     width: 120px;
     border: none;
     border-bottom: 1px solid #c6c6c6;
+    background-color: transparent;
 }
 
-input:focus {
+
+
+span > select:focus {
     outline: none;
 }
 
-input:focus ~ label {
-    top: -14px;
-    font-size: 12px;
+span > input:focus {
+    outline: none;
 }
 
+    span > input:focus ~ label, span > input:valid ~ label {
+        top: -14px;
+        font-size: 12px;
+        color: #2196F3;
+    }
+
+
 label {
-    color: #c6c6c6;
+    color: #000000;
     font-size: 16px;
     font-weight: normal;
     position: absolute;
+    pointer-events: none;
+    left: 5px;
+    top: 10px;
+    transition: 300ms ease all;
 }
+
+span {
+    position: relative;
+    margin-right: 50px;
+}
+
+.bar {
+    position: relative;
+    display: block;
+    width: 120px;
+    background: #2196F3;
+}
+
+
