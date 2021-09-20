@@ -21,8 +21,10 @@
             <label>Maximum price</label>
         </span>
         <span>
+            <select name="producerId" asp-items="ViewBag.ProducerId">
+                <option value="null">~</option>
+            </select>
             <label id="spanlbl">Producer: </label>
-            <select name="producerId" asp-items="ViewBag.ProducerId"></select>
             <span class="bar"></span>
         </span>
         <span>
@@ -31,6 +33,9 @@
             <label>Year</label>
         </span>
 
+        <input type="submit" value="Filter" class="btn btn-primary" />
+    </div>
+    @Html.ValidationMessage("PriceError")
         <input type="submit" value="Filter" class="btn btn-buy" />
     </div> 
 </form>

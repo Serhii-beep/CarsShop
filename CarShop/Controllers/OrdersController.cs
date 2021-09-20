@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using CarShop;
 using CarShop.Models;
-using CarShop.Repository;
 using System.Text.Json;
 
 namespace CarShop.Controllers
@@ -15,12 +14,9 @@ namespace CarShop.Controllers
     public class OrdersController : Controller
     {
         private readonly DbCarShopContext _context;
-        private ICarRepository _carRepo;
-
-        public OrdersController(DbCarShopContext context, ICarRepository carRepo)
+        public OrdersController(DbCarShopContext context)
         {
             _context = context;
-            _carRepo = carRepo;
         }
 
         // GET: Orders
@@ -37,8 +33,8 @@ namespace CarShop.Controllers
                 return NotFound();
             }
 
-            var order = await _context.Orders
-                .FirstOrDefaultAsync(m => m.OrderId == id);
+            var order = await _context.Orders.Where(c => c.OrderId == id).FirstOrDefaultAsync();
+
             if (order == null)
             {
                 return NotFound();
@@ -81,7 +77,7 @@ namespace CarShop.Controllers
                 return NotFound();
             }
 
-            var order = await _context.Orders.FindAsync(id);
+            var order = await _context.Orders.Where(c => c.OrderId == id).FirstOrDefaultAsync();
             if (order == null)
             {
                 return NotFound();
@@ -132,8 +128,8 @@ namespace CarShop.Controllers
                 return NotFound();
             }
 
-            var order = await _context.Orders
-                .FirstOrDefaultAsync(m => m.OrderId == id);
+            var order = await _context.Orders.Where(c => c.OrderId == id).FirstOrDefaultAsync();
+
             if (order == null)
             {
                 return NotFound();
@@ -147,7 +143,7 @@ namespace CarShop.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int Orderid)
         {
-            var order = await _context.Orders.FindAsync(Orderid);
+            Order order = await _context.Orders.FirstOrDefaultAsync(a => a.OrderId == Orderid);
             _context.Orders.Remove(order);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
@@ -162,7 +158,7 @@ namespace CarShop.Controllers
         {
             foreach(var item in orderedCars)
             {
-                Car car = await _carRepo.FindCar(item.car.CarId);
+                Car car = await _context.Cars.Where(c => c.CarId == item.car.CarId).FirstOrDefaultAsync();
                 car.OrderId = orderId;
             }
             await _context.SaveChangesAsync();

@@ -6,25 +6,22 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using CarShop;
-using CarShop.Repository;
+
 namespace CarShop.Controllers
 {
     public class ProducersController : Controller
     {
         private readonly DbCarShopContext _context;
 
-        private IProducerRepository _producerRepo;
-
-        public ProducersController(DbCarShopContext context, IProducerRepository producerRepository)
+        public ProducersController(DbCarShopContext context)
         {
             _context = context;
-            _producerRepo = producerRepository;
         }
 
         // GET: Producers
         public async Task<IActionResult> Index()
         {
-            return View(await _producerRepo.GetProducers());
+            return View(await _context.Producers.ToListAsync());
         }
 
         // GET: Producers/Details/5
@@ -37,8 +34,7 @@ namespace CarShop.Controllers
                 return NotFound();
             }
 
-            var producer = await _context.Producers
-                .FirstOrDefaultAsync(m => m.ProducerId == id);
+            var producer = await _context.Producers.Where(c => c.ProducerId == id).FirstOrDefaultAsync();
             if (producer == null)
             {
                 return NotFound();
@@ -62,7 +58,8 @@ namespace CarShop.Controllers
         {
             if (ModelState.IsValid)
             {
-                await _producerRepo.AddProducer(producer);
+                _context.Add(producer);
+                await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
             return View(producer);
@@ -76,7 +73,7 @@ namespace CarShop.Controllers
                 return NotFound();
             }
 
-            var producer = await _context.Producers.FindAsync(id);
+            var producer = await _context.Producers.Where(c => c.ProducerId == id).FirstOrDefaultAsync();
             if (producer == null)
             {
                 return NotFound();
@@ -100,7 +97,8 @@ namespace CarShop.Controllers
             {
                 try
                 {
-                    await _producerRepo.UpdateProducer(producer);
+                    _context.Update(producer);
+                    await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -126,8 +124,8 @@ namespace CarShop.Controllers
                 return NotFound();
             }
 
-            var producer = await _context.Producers
-                .FirstOrDefaultAsync(m => m.ProducerId == id);
+            var producer = await _context.Producers.Where(c => c.ProducerId == id).FirstOrDefaultAsync();
+
             if (producer == null)
             {
                 return NotFound();
@@ -141,10 +139,9 @@ namespace CarShop.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int Producerid)
         {
-            //var producer = await _context.Producers.FindAsync(id);
-            //_context.Producers.Remove(producer);
-            //await _context.SaveChangesAsync();
-            await _producerRepo.DeleteProducer(Producerid);
+            var producer = await _context.Producers.FindAsync(Producerid);
+            _context.Producers.Remove(producer);
+            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 

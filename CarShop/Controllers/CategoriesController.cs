@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using CarShop;
-using CarShop.Repository;
 
 namespace CarShop.Controllers
 {
@@ -14,25 +13,22 @@ namespace CarShop.Controllers
     {
         private readonly DbCarShopContext _context;
 
-        private ICategoryRepository _categoryRepo;
-
-        public CategoriesController(DbCarShopContext context, ICategoryRepository categoryRepo)
+        public CategoriesController(DbCarShopContext context)
         {
             _context = context;
-            _categoryRepo = categoryRepo;
         }
 
         // GET: Categories
         public async Task<IActionResult> Index()
         {
-            return View(await _categoryRepo.GetCategories());
+            return View(await _context.Categories.ToListAsync());
         }
         
         [Route("api/Categories/AllCategories")]
         [HttpGet]
         public async Task<IEnumerable<Category>> AllCategories()
         {
-            return await _categoryRepo.GetCategories();
+            return await _context.Categories.ToListAsync();
         }
 
         // GET: Categories/Details/5
@@ -43,8 +39,8 @@ namespace CarShop.Controllers
                 return NotFound();
             }
 
-            var category = await _context.Categories
-                .FirstOrDefaultAsync(m => m.CategoryId == id);
+            var category = await _context.Categories.Where(c => c.CategoryId == id).FirstOrDefaultAsync();
+
             if (category == null)
             {
                 return NotFound();
@@ -68,7 +64,8 @@ namespace CarShop.Controllers
         {
             if (ModelState.IsValid)
             {
-                await _categoryRepo.AddCategory(category);
+                _context.Add(category);
+                await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
             return View(category);
@@ -82,7 +79,8 @@ namespace CarShop.Controllers
                 return NotFound();
             }
 
-            var category = await _context.Categories.FindAsync(id);
+            var category = await _context.Categories.Where(c => c.CategoryId == id).FirstOrDefaultAsync();
+
             if (category == null)
             {
                 return NotFound();
@@ -106,7 +104,8 @@ namespace CarShop.Controllers
             {
                 try
                 {
-                   await _categoryRepo.UpdateCategory(category);
+                    _context.Update(category);
+                    await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -132,8 +131,8 @@ namespace CarShop.Controllers
                 return NotFound();
             }
 
-            var category = await _context.Categories
-                .FirstOrDefaultAsync(m => m.CategoryId == id);
+            var category = await _context.Categories.Where(c => c.CategoryId == id).FirstOrDefaultAsync();
+
             if (category == null)
             {
                 return NotFound();
@@ -147,7 +146,9 @@ namespace CarShop.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(int Categoryid)
         {
-            await _categoryRepo.DeleteCategory(Categoryid);
+            Category category = await _context.Categories.FindAsync(Categoryid);
+            _context.Categories.Remove(category);
+            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
