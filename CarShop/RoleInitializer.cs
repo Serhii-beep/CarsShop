@@ -11,7 +11,7 @@ namespace Hospital
     {
         public static async Task InitializeAsync(UserManager<User> userManager, RoleManager<IdentityRole> roleManager)
         {
-            string adminEmail = "peskosergij@gmail.com";
+            string adminEmail = "bubkamisha14@gmail.com";
             string password = "qwerty";
             if (await roleManager.FindByNameAsync("admin") == null)
             {
@@ -23,7 +23,7 @@ namespace Hospital
             }
             if (await userManager.FindByNameAsync(adminEmail) == null)
             {
-                User admin = new User { Email = adminEmail, UserName = adminEmail, Year = 2002 };
+                User admin = new User { Email = adminEmail, UserName = adminEmail};
                 IdentityResult result = await userManager.CreateAsync(admin, password);
                 if (result.Succeeded)
                 {
