@@ -35,9 +35,7 @@
 
         <input type="submit" value="Filter" class="btn btn-primary" />
     </div>
-    @Html.ValidationMessage("PriceError")
-        <input type="submit" value="Filter" class="btn btn-buy" />
-    </div> 
+    @Html.ValidationMessage("PriceError", new { @class = "text-danger" })
 </form>
 
 
