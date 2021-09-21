@@ -27,6 +27,10 @@ namespace CarShop.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(string name)
         {
+            if (!User.IsInRole("admin"))
+            {
+                return RedirectToAction("Index", "Cars");
+            }
             if (!string.IsNullOrEmpty(name))
             {
                 var result = await _roleManager.CreateAsync(new IdentityRole(name));
@@ -49,6 +53,10 @@ namespace CarShop.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(string id)
         {
+            if (!User.IsInRole("admin"))
+            {
+                return RedirectToAction("Index", "Cars");
+            }
             IdentityRole role = await _roleManager.FindByIdAsync(id);
             if (role != null)
             {

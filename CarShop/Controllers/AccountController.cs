@@ -6,7 +6,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using CarShop.Models;
 using CarShop.ViewModels;
-using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication;
 
@@ -60,9 +59,9 @@ namespace CarShop.Controllers
         }
 
         [HttpGet]
-        public IActionResult Login(string returnUrl = null)
+        public IActionResult Login()
         {
-            return View(new LoginViewModel { ReturnUrl = returnUrl });
+            return View();
         }
 
         [HttpPost]
@@ -80,7 +79,7 @@ namespace CarShop.Controllers
                         return View(model);
                     }
                 }
-                var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, false, false);
+                var result = await _signInManager.PasswordSignInAsync(user, model.Password, false, false);
                 if(result.Succeeded)
                 {
                     return RedirectToAction("Index", "Cars");

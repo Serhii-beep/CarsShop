@@ -46,6 +46,10 @@ namespace CarShop.Controllers
         // GET: Producers/Create
         public IActionResult Create()
         {
+            if (!User.IsInRole("admin"))
+            {
+                return RedirectToAction("Index", "Cars");
+            }
             return View();
         }
 
@@ -56,6 +60,7 @@ namespace CarShop.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("ProducerId,Name,Country,LogoUrl,Info")] Producer producer)
         {
+
             if (ModelState.IsValid)
             {
                 _context.Add(producer);
@@ -68,6 +73,10 @@ namespace CarShop.Controllers
         // GET: Producers/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
+            if (!User.IsInRole("admin"))
+            {
+                return RedirectToAction("Index", "Cars");
+            }
             if (id == null)
             {
                 return NotFound();
@@ -119,6 +128,10 @@ namespace CarShop.Controllers
         // GET: Producers/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
+            if (!User.IsInRole("admin"))
+            {
+                return RedirectToAction("Index", "Cars");
+            }
             if (id == null)
             {
                 return NotFound();
