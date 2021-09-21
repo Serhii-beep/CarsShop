@@ -17,5 +17,16 @@ namespace CarShop.Controllers
             _userManager = userManager;
         }
         public IActionResult Index() => View(_userManager.Users.ToList());
+
+        [HttpPost]
+        public async Task<IActionResult> Delete(string id)
+        {
+            User user = await _userManager.FindByIdAsync(id);
+            if (user != null)
+            {
+                IdentityResult result = await _userManager.DeleteAsync(user);
+            }
+            return RedirectToAction("Index");
+        }
     }
 }

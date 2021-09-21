@@ -18,7 +18,6 @@ namespace CarShop
                 dynamic list = JsonConvert.DeserializeObject(json);
                 emailAddress = list.EmailData.Address;
                 password = list.EmailData.Password;
-
             }
             var emailMessage = new MimeMessage();
             emailMessage.From.Add(new MailboxAddress("CarShop", emailAddress));
