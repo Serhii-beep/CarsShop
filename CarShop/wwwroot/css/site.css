@@ -98,3 +98,15 @@ body {
 #toOrder {
     float: right;
 }
+
+#logout {
+    background: none;
+    border: none;
+}
+
+#logoutlbl {
+    position: relative;
+    float: right;
+    top: 7px;
+    margin-right: 15px;
+}

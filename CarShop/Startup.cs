@@ -54,7 +54,7 @@ namespace CarShop
         {
             if (env.IsDevelopment())
             {
-                app.UseDeveloperExceptionPage();
+                app.UseDeveloperExceptionPage();    
             }
             else
             {
@@ -69,6 +69,7 @@ namespace CarShop
             app.UseRouting();
 
             app.UseAuthorization();
+            app.UseAuthentication();
 
             app.UseEndpoints(endpoints =>
             {

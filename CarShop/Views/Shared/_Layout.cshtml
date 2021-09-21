@@ -15,10 +15,10 @@
     <div class="small-nav">
         @if (_signInManager.IsSignedIn(User))
         {
-            <form method="post" , asp-action="Logout" asp-controller="Account">
-                <label>@User.Identity.Name</label>
-                <button class="nav-btn"type="submit">Log out</button>
-            </form>
+        <form method="post" , asp-action="Logout" asp-controller="Account">
+            <button id="logout" class="nav-btn" type="submit">Log out</button>
+            <label id="logoutlbl">@User.Identity.Name</label>
+        </form>
         }
         else
         {

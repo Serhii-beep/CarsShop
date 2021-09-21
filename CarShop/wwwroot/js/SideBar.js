@@ -26,7 +26,7 @@
     a.addEventListener('click', getCategories);
 
     function getCategories() {
-        fetch('https://localhost:44323/api/Categories/AllCategories')
+        fetch('https://localhost:44390/api/Categories/AllCategories')
             .then(response => response.json())
             .then(data => displayCategories(data));
     }

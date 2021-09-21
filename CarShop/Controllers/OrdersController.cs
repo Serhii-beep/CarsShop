@@ -72,6 +72,10 @@ namespace CarShop.Controllers
         // GET: Orders/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
+            if (!User.IsInRole("admin"))
+            {
+                return RedirectToAction("Index", "Cars");
+            }
             if (id == null)
             {
                 return NotFound();
@@ -120,34 +124,6 @@ namespace CarShop.Controllers
             return View(order);
         }
 
-        // GET: Orders/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var order = await _context.Orders.Where(c => c.OrderId == id).FirstOrDefaultAsync();
-
-            if (order == null)
-            {
-                return NotFound();
-            }
-
-            return View(order);
-        }
-
-        // POST: Orders/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int Orderid)
-        {
-            Order order = await _context.Orders.FirstOrDefaultAsync(a => a.OrderId == Orderid);
-            _context.Orders.Remove(order);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
 
         private bool OrderExists(int id)
         {

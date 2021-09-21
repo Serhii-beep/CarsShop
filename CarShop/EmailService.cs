@@ -1,8 +1,6 @@
 ﻿using MimeKit;
 using MailKit.Net.Smtp;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Configuration;
-using System.Text.Json;
 using System.IO;
 using Newtonsoft.Json;
 
@@ -27,7 +25,7 @@ namespace CarShop
             emailMessage.To.Add(new MailboxAddress("", email));
             emailMessage.Subject = subject;
             emailMessage.Body = new TextPart(MimeKit.Text.TextFormat.Html)
-            {
+            {                
                 Text = message
             };
 

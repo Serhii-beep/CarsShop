@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using CarShop;
+using Microsoft.AspNetCore.Authorization;
 
 namespace CarShop.Controllers
 {
@@ -70,6 +70,10 @@ namespace CarShop.Controllers
         // GET: Cars/Create
         public IActionResult Create(int? categoryId)
         {
+            if(!User.IsInRole("admin"))
+            {
+                return RedirectToAction("Index", "Cars");
+            }
             ViewBag.catId = categoryId;
             if (categoryId != null)
             {
@@ -109,6 +113,10 @@ namespace CarShop.Controllers
         // GET: Cars/Edit/5
         public async Task<IActionResult> Edit(int? id, int? categoryId)
         {
+            if (!User.IsInRole("admin"))
+            {
+                return RedirectToAction("Index", "Cars");
+            }
             ViewBag.catId = categoryId;
             if (id == null)
             {
@@ -168,6 +176,10 @@ namespace CarShop.Controllers
         // GET: Cars/Delete/5
         public async Task<IActionResult> Delete(int? id, int? categoryId)
         {
+            if (!User.IsInRole("admin"))
+            {
+                return RedirectToAction("Index", "Cars");
+            }
             ViewBag.categoryId = categoryId;
             if (id == null)
             {
