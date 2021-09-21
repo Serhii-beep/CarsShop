@@ -8,9 +8,10 @@ using Microsoft.EntityFrameworkCore;
 using CarShop;
 using CarShop.Models;
 using System.Text.Json;
-
+using Microsoft.AspNetCore.Authorization;
 namespace CarShop.Controllers
 {
+    [Authorize(Roles = "admin")]
     public class OrdersController : Controller
     {
         private readonly DbCarShopContext _context;

@@ -34,15 +34,17 @@
     </div>
     <hr />
     <div>
+        @if (User.IsInRole("admin"))
+        {
         <a asp-action="Edit" asp-route-id="@Model.ProducerId">Edit</a>
+        <i>|</i>
+        }
         @if (@ViewBag.CarId != null)
         {
-            <i>|</i>
             <a href="@ViewBag.Path">Back</a>
         }
         else
         {
-            <i>|</i>
             <a asp-action="index">Back to Producers</a>
         }
     </div>

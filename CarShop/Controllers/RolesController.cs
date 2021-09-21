@@ -6,9 +6,11 @@ using System.Threading.Tasks;
 using CarShop.Models;
 using CarShop.ViewModels;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
 
 namespace CarShop.Controllers
 {
+    [Authorize(Roles = "admin")]
     public class RolesController : Controller
     {
         RoleManager<IdentityRole> _roleManager;

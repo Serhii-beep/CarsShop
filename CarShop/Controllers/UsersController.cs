@@ -6,9 +6,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using CarShop.Models;
 using CarShop.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 
 namespace CarShop.Controllers
 {
+    [Authorize(Roles = "admin")]
     public class UsersController : Controller
     {
         UserManager<User> _userManager;

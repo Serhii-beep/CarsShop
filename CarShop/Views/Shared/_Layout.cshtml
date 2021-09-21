@@ -35,10 +35,13 @@
                         <a asp-controller="Cars" asp-action="Index" asp-route-categoryId="null">Car Shop</a>
                     </div>
                 </div>
+                @if (User.IsInRole("admin"))
+                {
                 <li><a asp-controller="Categories" asp-action="Index"><i class="fas fa-cog"></i> Manage categories</a></li>
                 <li><a asp-controller="Producers" asp-action="Index"><i class="fas fa-cog"></i> Manage producers</a></li>
                 <li><a asp-controller="Orders" asp-action="Index"><i class="fas fa-cog"></i> Manage orders</a></li>
                 <li><a asp-controller="Users" asp-action="Index"><i class="fas fa-users"></i> Manage Users</a></li>
+                }
 
                 <li class="dropdown">
                     <a id="categoriesButton" href="#" class="dropdown-toggle" data-toggle="dropdown">Categories <span class="caret"></span></a>
