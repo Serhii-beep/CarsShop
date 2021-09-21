@@ -8,6 +8,7 @@ using CarShop.Models;
 using CarShop.ViewModels;
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authentication;
 
 namespace CarShop.Controllers
 {
