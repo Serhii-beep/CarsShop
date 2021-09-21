@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using CarShop.Models;
 using Microsoft.AspNetCore.Identity;
 
-namespace Hospital
+namespace CarShop
 {
     public class RoleInitializer
     {

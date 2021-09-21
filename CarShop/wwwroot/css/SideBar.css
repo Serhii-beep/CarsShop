@@ -208,7 +208,7 @@ html {
 
 .hamburger {
     position: fixed;
-    top: 20px;
+    top: 45px;
     z-index: 999;
     display: block;
     width: 32px;
