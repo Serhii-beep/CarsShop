@@ -44,7 +44,8 @@ namespace CarShop.Controllers
                     EmailService emailService = new EmailService();
                     await emailService.SendEmailAsync(model.Email, "Confirm registration", $"Confirm your registration by clicking on this url:" +
                         $" <a href='{callbackUrl}'>{callbackUrl}</a>");
-                    return Content("To end registration click on url sended at your email address");
+                    ViewBag.SuccedMessage = "To end registration click on url sended at your email address:" + $" {model.Email}";
+                    return View(model);
                 }
                 else
                 {
@@ -147,7 +148,8 @@ namespace CarShop.Controllers
                 var callbackUrl = Url.Action("ResetPassword", "Account", new { userId = user.Id, email = model.Email, code = code }, protocol: HttpContext.Request.Scheme);
                 EmailService emailService = new EmailService();
                 await emailService.SendEmailAsync(model.Email, "Reset Password", $"To reset password click on link <a href='{callbackUrl}'>{callbackUrl}</a>");
-                return View("ForgotPasswordConfirmation");
+                ViewBag.SuccedMessage = "Click on link sended at your email address to reset password";
+                return View(model);
             }
             return View(model);
         }
