@@ -1,15 +1,11 @@
 ﻿
 .btn {
     box-sizing: border-box;
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none;
     background-color: transparent;
     border: 2px solid #f1c40f;
     border-radius: 0.6em;
     color: #f1c40f;
     cursor: pointer;
-    -webkit-align-self: center;
     -ms-flex-item-align: center;
     align-self: center;
     font-size: 1rem;

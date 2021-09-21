@@ -2,17 +2,27 @@
 using MailKit.Net.Smtp;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
+using System.Text.Json;
+using System.IO;
+using Newtonsoft.Json;
 
 namespace CarShop
 {
     public class EmailService
     {
-        private IConfiguration _config;
         public async Task SendEmailAsync(string email, string subject, string message)
         {
+            string emailAddress = "";
+            string password = "";
+            using(StreamReader sr = new StreamReader("appsettings.json"))
+            {
+                string json = sr.ReadToEnd();
+                dynamic list = JsonConvert.DeserializeObject(json);
+                emailAddress = list.EmailData.Address;
+                password = list.EmailData.Password;
+
+            }
             var emailMessage = new MimeMessage();
-            string emailAddress = _config.GetSection("EmailData").GetSection("Address").Value;
-            string password = _config.GetSection("EmailData").GetSection("Password").Value;
             emailMessage.From.Add(new MailboxAddress("CarShop", emailAddress));
             emailMessage.To.Add(new MailboxAddress("", email));
             emailMessage.Subject = subject;
