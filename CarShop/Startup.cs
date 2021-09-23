@@ -29,10 +29,11 @@ namespace CarShop
         {
             string connection = Configuration.GetConnectionString("DefaultConnection");
             services.AddDbContext<DbCarShopContext>(options => options.UseSqlServer(connection));
-            services.AddControllersWithViews();
+
 
             string connectionIdentity = Configuration.GetConnectionString("IdentityConnection");
             services.AddDbContext<IdentityContext>(options => options.UseSqlServer(connectionIdentity));
+            services.AddControllersWithViews();
             services.AddIdentity<User, IdentityRole>(opts =>
             {
                 opts.Password.RequiredLength = 5;
@@ -68,6 +69,8 @@ namespace CarShop
 
             app.UseRouting();
 
+
+            app.UseAuthentication();
             app.UseAuthorization();
             app.UseAuthentication();
 

@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using CarShop.Models;
 using CarShop.ViewModels;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authentication;
 
 namespace CarShop.Controllers
 {
