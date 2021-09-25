@@ -78,15 +78,19 @@ namespace CarShop.Controllers
                         ModelState.AddModelError(string.Empty, "Please confirm your registration by clicking on link sended at your email address");
                         return View(model);
                     }
-                }
-                var result = await _signInManager.PasswordSignInAsync(user, model.Password, false, false);
-                if(result.Succeeded)
-                {
-                    return RedirectToAction("Index", "Cars");
+                    var result = await _signInManager.PasswordSignInAsync(user, model.Password, false, false);
+                    if (result.Succeeded)
+                    {
+                        return RedirectToAction("Index", "Cars");
+                    }
+                    else
+                    {
+                        ModelState.AddModelError(string.Empty, "Wrong login or(and) password");
+                    }
                 }
                 else
                 {
-                    ModelState.AddModelError(string.Empty, "Wrong login or(and) password");
+                    ModelState.AddModelError(string.Empty, "You are not registered!");
                 }
             }
             return View(model);
