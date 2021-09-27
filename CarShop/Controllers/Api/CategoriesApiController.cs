@@ -47,7 +47,7 @@ namespace CarShop.Controllers
                 _context.Update(category);
                 _context.SaveChanges();
             }
-            catch(DbUpdateConcurrencyException ex)
+            catch(DbUpdateConcurrencyException)
             {
                 if(!_context.Categories.Any(c => c.CategoryId == id))
                 {

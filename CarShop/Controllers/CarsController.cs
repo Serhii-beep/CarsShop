@@ -117,7 +117,9 @@ namespace CarShop.Controllers
             {
                 return RedirectToAction("Index", "Cars");
             }
+
             ViewBag.catId = categoryId;
+
             if (id == null)
             {
                 return NotFound();
