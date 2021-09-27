@@ -22,16 +22,16 @@ namespace CarShop.Controllers.API
 
         // GET: api/CarsApi
         [HttpGet]
-        public ActionResult<IEnumerable<Car>> GetCars()
+        public ActionResult<IEnumerable<Car>> GetAllCars()
         {
-            return  Ok(_context.Cars.ToList());
+            return Ok(_context.Cars.Include(a => a.Producer).ToList());
         }
 
         // GET: api/CarsApi/5
         [HttpGet("{id}")]
         public  ActionResult<Car> GetCar(int id)
         {
-            var car =  _context.Cars.Find(id);
+            var car = _context.Cars.Include(a => a.Producer).FirstOrDefault(a => a.CarId == id);
 
             if (car == null)
             {
@@ -44,7 +44,7 @@ namespace CarShop.Controllers.API
         // PUT: api/CarsApi/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public IActionResult PutCar(int id, Car car)
+        public IActionResult UpdateCar(int id, Car car)
         {
             if (id != car.CarId)
             {
@@ -71,13 +71,13 @@ namespace CarShop.Controllers.API
                 return new BadRequestObjectResult(ex.Message);
             }
 
-            return Ok();
+            return Ok(car);
         }
 
         // POST: api/CarsApi
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public ActionResult<Car> PostCar(Car car)
+        public ActionResult<Car> AddCar(Car car)
         {
             if(!ModelState.IsValid)
             {

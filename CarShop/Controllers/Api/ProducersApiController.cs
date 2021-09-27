@@ -22,7 +22,7 @@ namespace CarShop.Controllers
 
         // GET: api/ProducersApi
         [HttpGet]
-        public ActionResult<IEnumerable<Producer>> GetProducers()
+        public ActionResult<IEnumerable<Producer>> GetAllProducers()
         {
             return Ok(_context.Producers.ToList());
         }
@@ -44,7 +44,7 @@ namespace CarShop.Controllers
         // PUT: api/ProducersApi/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public IActionResult PutProducer(int id, Producer producer)
+        public IActionResult UpdateProducer(int id, Producer producer)
         {
             if (id != producer.ProducerId)
             {
@@ -71,13 +71,13 @@ namespace CarShop.Controllers
                 return new BadRequestObjectResult(ex.Message);
             }
 
-            return NoContent();
+            return Ok(producer);
         }
 
         // POST: api/ProducersApi
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public  ActionResult<Producer> PostProducer(Producer producer)
+        public  ActionResult<Producer> AddProducer(Producer producer)
         {
             if(!ModelState.IsValid)
             {

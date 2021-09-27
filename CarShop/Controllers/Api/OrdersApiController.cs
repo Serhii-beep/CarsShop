@@ -22,7 +22,7 @@ namespace CarShop.Controllers
 
         // GET: api/OrdersApi
         [HttpGet]
-        public ActionResult<IEnumerable<Order>> GetOrders()
+        public ActionResult<IEnumerable<Order>> GetAllOrders()
         {
             return Ok(_context.Orders.ToList());
         }
@@ -44,7 +44,7 @@ namespace CarShop.Controllers
         // PUT: api/OrdersApi/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public IActionResult PutOrder(int id, Order order)
+        public IActionResult UpdateOrder(int id, Order order)
         {
             if (id != order.OrderId)
             {
@@ -70,13 +70,13 @@ namespace CarShop.Controllers
             {
                 return new BadRequestObjectResult(ex.Message);
             }
-            return NoContent();
+            return Ok(order);
         }
 
         // POST: api/OrdersApi
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public ActionResult<Order> PostOrder(Order order)
+        public ActionResult<Order> AddOrder(Order order)
         {
             if(!ModelState.IsValid)
             {
