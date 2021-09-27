@@ -26,7 +26,7 @@
     a.addEventListener('click', getCategories);
 
     function getCategories() {
-        fetch('https://localhost:44326/api/Categories/AllCategories')
+        fetch('https://carshop12.azurewebsites.net/api/CategoriesApiController/GetAllCategories')
             .then(response => response.json())
             .then(data => displayCategories(data));
     }

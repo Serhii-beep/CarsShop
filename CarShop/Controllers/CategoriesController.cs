@@ -23,13 +23,6 @@ namespace CarShop.Controllers
         {
             return View(await _context.Categories.ToListAsync());
         }
-        
-        [Route("api/Categories/AllCategories")]
-        [HttpGet]
-        public async Task<IEnumerable<Category>> AllCategories()
-        {
-            return await _context.Categories.ToListAsync();
-        }
 
         // GET: Categories/Details/5
         public async Task<IActionResult> Details(int? id)
