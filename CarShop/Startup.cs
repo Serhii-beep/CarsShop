@@ -72,7 +72,6 @@ namespace CarShop
 
             app.UseAuthentication();
             app.UseAuthorization();
-            app.UseAuthentication();
 
             app.UseEndpoints(endpoints =>
             {
