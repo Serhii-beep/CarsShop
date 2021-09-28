@@ -5,9 +5,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using CarShop;
 
-namespace CarShop.Controllers.API
+namespace CarShop.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
