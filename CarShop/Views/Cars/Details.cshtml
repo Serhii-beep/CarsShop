@@ -4,6 +4,7 @@
     ViewData["Title"] = $"{Model.car.Producer.Name} {Model.car.Model}";
 }
 <link rel="stylesheet" href="~/css/DetailsStyle.css" />
+<link rel="stylesheet" href="~/css/card.css" />
 <!-- Product section-->
 <section class="py-5">
     <div class="container px-4 px-lg-5 my-5">
@@ -36,11 +37,10 @@
 <section class="py-5">
     <div class="container px-4 px-lg-5 mt-5">
         <h2 class="fw-bolder mb-4">Related products</h2>
-        <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+        <div class="cards row-3">
             @foreach (Car item in Model.RelatedCars)
             {
-                <div id="related-product" class="col mb-5" onclick="cardClick(@item.CarId)">
-                    <div class="card h-100">
+                <div class="card" onclick="cardClick(@item.CarId)">
                         <!-- Product image-->
                         <img class="card-img-top" src=@item.PhotoUrl alt="..." />
                         <!-- Product details-->
@@ -59,12 +59,10 @@
                                 <div>
                                     @Html.Hidden("returnUrl", (string)ViewBag.Path)
                                     <input type="submit" class="btn btn-outline-dark flex-shrink-0" value="Add to Cart" />
-                                    <a asp-action="Details" asp-route-id="@item.CarId" asp-route-categoryId="@ViewBag.categoryId" class="btn btn-outline-dark flex-shrink-0" style="margin-left:10px"> Details</a>
                                 </div>
                             }
                         </div>
                     </div>
-                </div>
             }
         </div>
     </div>
