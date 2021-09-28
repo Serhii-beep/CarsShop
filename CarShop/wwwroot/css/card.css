@@ -12,12 +12,18 @@
     background-color: #CFD8DC;
 }
 
-    .card img {
-        max-width: 100%;
+    .card:hover {
+        background-color: #a9bad6;
+        cursor: pointer;
     }
 
-    .card .text {
-        padding: 0 20px 20px;
+    .card img {
+        max-width: 100%;
+        top: 0;
+    }
+
+    .text {
+        padding: 0 5px 20px;
     }
 
 table {

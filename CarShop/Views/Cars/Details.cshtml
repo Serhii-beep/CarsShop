@@ -1,7 +1,7 @@
 ﻿@model CarShop.ViewModels.CarDetailsViewModel
 
 @{
-    ViewData["Title"] = "View";
+    ViewData["Title"] = $"{Model.Producer.Name} {Model.Model}";
 }
 <link rel="stylesheet" href="~/css/DetailsStyle.css" />
 <!-- Product section-->
