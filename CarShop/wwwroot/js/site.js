@@ -2,3 +2,6 @@
 // for details on configuring this project to bundle and minify static web assets.
 
 // Write your JavaScript code.
+function cardClick(carId) {
+    window.location.href = 'https://localhost:44390/Cars/Details/?id=' + carId;
+}

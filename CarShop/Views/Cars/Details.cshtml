@@ -1,8 +1,9 @@
 ﻿@model CarShop.Car
 
 @{
-    ViewData["Title"] = "View";
+    ViewData["Title"] = $"{Model.Producer.Name} {Model.Model}";
 }
+
 
 <h1>@Html.DisplayFor(model => model.Model)</h1>
 

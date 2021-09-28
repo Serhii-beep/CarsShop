@@ -59,7 +59,7 @@ else
 <main class="cards row-3">
     @foreach (var item in Model)
     {
-        <div class="card">
+        <div class="card" onclick="cardClick(@item.CarId)" data-carId="@item.CarId">
             <table class="table-borderless">
                 <tbody>
                     <tr>
@@ -74,7 +74,6 @@ else
                     <tr>
                         <td>
                             <div style="text-align: center;">
-                                <a asp-action="Details" asp-route-id="@item.CarId" asp-route-categoryId="@ViewBag.categoryId"><i class="fas fa-info-circle"></i></a>
                                 @if (User.IsInRole("admin"))
                                 {
                                     <i>|</i>
