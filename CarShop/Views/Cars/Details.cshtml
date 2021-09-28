@@ -1,71 +1,74 @@
-﻿@model CarShop.Car
+﻿@model CarShop.ViewModels.CarDetailsViewModel
 
 @{
     ViewData["Title"] = "View";
 }
-
-<h1>@Html.DisplayFor(model => model.Model)</h1>
-
-<h4>@Html.DisplayFor(model => model.Category.Name)</h4>
-
-<br />
-<div class="container">
-    <div class="row row-cols-2">
-        <div class="col">
-            <dl class="row">
-                <dt class="col-sm-2">
-                    @Html.DisplayNameFor(model => model.PhotoUrl)
-                </dt>
-                <dd class="col-sm-10">
-                    <img src=@Model.PhotoUrl width="200" height="200">
-                </dd>
-                <dt class="col-sm-2">
-                    @Html.DisplayNameFor(model => model.Price)
-                </dt>
-                <dd class="col-sm-10">
-                    @Html.DisplayFor(model => model.Price)$
-                </dd>
-                <dt class="col-sm-2">
-                    @Html.DisplayNameFor(model => model.Year)
-                </dt>
-                <dd class="col-sm-10">
-                    @Html.DisplayFor(model => model.Year)
-                </dd>
-                <dt class="col-sm-2">
-                    @Html.DisplayNameFor(model => model.Description)
-                </dt>
-                <dd class="col-sm-10">
-                    @Html.DisplayFor(model => model.Description)
-                </dd>
-            </dl>
-            <div>
-                <a asp-action="Index" asp-route-categoryId="@ViewBag.categoryId"><i class="fas fa-list-ul"></i> Back</a>
-            </div>
-        </div>
-        <div class="col">
-            <dl class="row">
-                <dt class="col-sm-2">
-                    @Html.DisplayNameFor(model => model.Producer)
-                </dt>
-                <dd class="col-sm-10">
-                    @Html.DisplayFor(model => model.Producer.Name)
-                </dd>
-                <dt class="col-sm-2">
-                    @Html.DisplayNameFor(model => model.Producer.Country)
-                </dt>
-                <dd class="col-sm-10">
-                    @Html.DisplayFor(model => model.Producer.Country)
-                </dd>
-                <dt class="col-sm-2">
-                    @Html.DisplayNameFor(model => model.Producer.LogoUrl)
-                </dt>
-                <dd class="col-sm-10">
-                    <img src=@Model.Producer.LogoUrl width="200" height="200">
-                </dd>
-            </dl>
-            <div>
-                @Html.ActionLink("Details", "Details", "Producers", new { id = Model.ProducerId, CarId = Model.CarId, returnUrl = (string)ViewBag.Path}, new { @class = "fas fa-info-circle" })
+<link rel="stylesheet" href="~/css/DetailsStyle.css" />
+<!-- Product section-->
+<section class="py-5">
+    <div class="container px-4 px-lg-5 my-5">
+        <div class="row gx-4 gx-lg-5 align-items-center">
+            <div class="col-md-6"><img class="card-img-top mb-5 mb-md-0" src=@Model.car.PhotoUrl alt="..." /></div>
+            <div class="col-md-6">
+                <div class="small mb-3">
+                    @Html.ActionLink($"{Model.car.Producer.Name}", "Details", "Producers", new { id = Model.car.ProducerId, CarId = Model.car.CarId, returnUrl = (string)ViewBag.Path }, new { @class = "btn btn-outline-dark flex-shrink-0" })
+                </div>
+                <h1 class="display-5 fw-bolder">@Html.DisplayFor(model => model.car.Model)</h1>
+                <div class="fs-5 mb-5">
+                    <span>@Html.DisplayFor(model => model.car.Price)$</span>
+                </div>
+                <p class="lead">@Html.DisplayFor(model => model.car.Description)</p>
+                <div class="d-flex">
+                    @using (Html.BeginForm("AddToCart", "Cart", new { carId = Model.car.CarId }))
+                    {
+                    <div>
+                        @Html.Hidden("returnUrl", (string)ViewBag.Path)
+                        <input type="submit" class="btn btn-outline-dark flex-shrink-0" value="Add to Cart" />
+                        <a asp-action="Index" asp-route-categoryId="@ViewBag.categoryId" class="btn btn-outline-dark flex-shrink-0" style="margin-left:10px"> Back</a>
+                    </div>
+                    }
+                </div>
             </div>
         </div>
     </div>
-</div>
+</section>
+<!-- Related items section-->
+<section class="py-5 bg-light">
+    <div class="container px-4 px-lg-5 mt-5">
+        <h2 class="fw-bolder mb-4">Related products</h2>
+        <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+            @foreach (Car item in Model.RelatedCars)
+            {
+                <div class="col mb-5">
+                    <div class="card h-100">
+                        <!-- Product image-->
+                        <img class="card-img-top" src=@item.PhotoUrl alt="..." />
+                        <!-- Product details-->
+                        <div class="card-body p-4">
+                            <div class="text-center">
+                                <!-- Product name-->
+                                <h5 class="fw-bolder">@item.Model</h5>
+                                <!-- Product price-->
+                                @item.Price$
+                            </div>
+                        </div>
+                        <!-- Product actions-->
+                        <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                            @using (Html.BeginForm("AddToCart", "Cart", new { carId = item.CarId }))
+                            {
+                                <div>
+                                    @Html.Hidden("returnUrl", (string)ViewBag.Path)
+                                    <input type="submit" class="btn btn-outline-dark flex-shrink-0" value="Add to Cart" />
+                                    <a asp-action="Details" asp-route-id="@item.CarId" asp-route-categoryId="@ViewBag.categoryId" class="btn btn-outline-dark flex-shrink-0" style="margin-left:10px"> Details</a>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</section>
+
+<!-- Bootstrap core JS-->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"></script>

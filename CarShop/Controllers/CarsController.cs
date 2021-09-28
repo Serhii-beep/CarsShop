@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
-
+using CarShop.ViewModels;
 namespace CarShop.Controllers
 {
     public class CarsController : Controller
@@ -22,7 +22,6 @@ namespace CarShop.Controllers
         public async Task<IActionResult> Index(int? categoryId, int? minPrice, int? maxPrice, int? producerId, int? year)
         {
             ViewData["ProducerId"] = new SelectList(_context.Producers, "ProducerId", "Name");
-
             ViewBag.categoryId = categoryId;
             ViewBag.Path = HttpContext.Request.Path + HttpContext.Request.QueryString;
 
@@ -53,6 +52,7 @@ namespace CarShop.Controllers
         {
             ViewBag.Path = HttpContext.Request.Path + HttpContext.Request.QueryString;
             ViewBag.categoryId = categoryId;
+            
             if (id == null)
             {
                 return NotFound();
@@ -64,7 +64,10 @@ namespace CarShop.Controllers
                 return NotFound();
             }
 
-            return View(car);
+            List<Car> cars = _context.Cars.Where(a => a.CategoryId == car.CategoryId && a.ProducerId == car.ProducerId && a.CarId != car.CarId).ToList();
+            GetNRandomCars(cars, 4);
+
+            return View(new CarDetailsViewModel { car=car, RelatedCars = cars});
         }
 
         // GET: Cars/Create
@@ -214,6 +217,28 @@ namespace CarShop.Controllers
             return _context.Cars.Any(e => e.CarId == id);
         }
 
+        private List<Car> GetNRandomCars(List<Car> cars, int n )
+        {
+            if(cars.Count <= n)
+            {
+                return cars;
+            }
+            var selected = new List<Car>();
+            double needed = n;
+            double available = cars.Count;
+            var rand = new Random();
+            while (selected.Count < n)
+            {
+                if (rand.NextDouble() < needed / available)
+                {
+                    selected.Add(cars[(int)available - 1]);
+                   needed--;
+                }
+                available--;
+            }
+
+            return selected;
+        }
         private IEnumerable<Car> GetFiltredCars(IEnumerable<Car> cars,int? minPrice, int? maxPrice, int? producerId, int? year)
         {
             if (producerId != null)
