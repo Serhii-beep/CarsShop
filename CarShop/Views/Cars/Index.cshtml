@@ -76,7 +76,6 @@ else
                             <div style="text-align: center;">
                                 @if (User.IsInRole("admin"))
                                 {
-                                    <i>|</i>
                                     <a asp-action="Edit" asp-route-id="@item.CarId" asp-route-categoryId="@ViewBag.categoryId"><i class="fas fa-edit"></i></a>
                                     <i>|</i>
                                     <a asp-action="Delete" asp-route-id="@item.CarId" asp-route-categoryId="@ViewBag.categoryId"><i class="far fa-trash-alt"></i></a>
