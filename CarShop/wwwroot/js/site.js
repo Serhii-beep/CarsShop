@@ -3,5 +3,5 @@
 
 // Write your JavaScript code.
 function cardClick(carId) {
-    window.location.href = 'https://carshop12.azurewebsites.net/Cars/Details/?id=' + carId;
+    window.location.href = 'https://localhost:44326/Cars/Details/?id=' + carId;
 }

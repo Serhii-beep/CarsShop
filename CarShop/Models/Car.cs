@@ -24,7 +24,6 @@ namespace CarShop
         [Required(ErrorMessage = "Required field")]
         [Display(Name = "Producer")]
         public int ProducerId { get; set; }
-        [Required(ErrorMessage = "Required field")]
         [DataType(DataType.ImageUrl)]
         [Display(Name = "Path to photo")]
         public string PhotoUrl { get; set; }

@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using CarShop.Models;
-
+using CarShop.FileManager;
 namespace CarShop
 {
     public class Startup
@@ -47,6 +47,7 @@ namespace CarShop
             services.AddDistributedMemoryCache();
             services.AddSession();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddTransient<IFileManager, PhotoManager>();
 
         }
 

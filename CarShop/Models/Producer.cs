@@ -19,7 +19,6 @@ namespace CarShop
         public string Name { get; set; }
         [Required(ErrorMessage = "Required field")]
         public string Country { get; set; }
-        [Required(ErrorMessage = "Required field")]
         [DataType(DataType.ImageUrl)]
         [Display(Name = "Path to photo")]
         public string LogoUrl { get; set; }

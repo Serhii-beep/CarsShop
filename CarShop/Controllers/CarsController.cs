@@ -7,15 +7,20 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
 using CarShop.ViewModels;
+using CarShop.FileManager;
+using Microsoft.AspNetCore.Http;
+using System.IO;
 namespace CarShop.Controllers
 {
     public class CarsController : Controller
     {
         private readonly DbCarShopContext _context;
-        public CarsController(DbCarShopContext context)
+
+        private readonly IFileManager _fileManager;
+        public CarsController(DbCarShopContext context, IFileManager fileManager)
         {
             _context = context;
-
+            _fileManager = fileManager;
         }
 
         // GET: Cars
@@ -92,8 +97,21 @@ namespace CarShop.Controllers
         // POST: Cars/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(int? catId, [Bind("CarId,Model,CategoryId,Price,Year,ProducerId,PhotoUrl,Description,OrderId")] Car car)
+        public async Task<IActionResult> Create(int? catId, IFormFile uploadFile, [Bind("CarId,Model,CategoryId,Price,Year,ProducerId,PhotoUrl,Description,OrderId")] Car car)
         {
+            if (uploadFile == null)
+            {
+                ModelState.AddModelError("PhotoNullError", "Please upload the photo");
+            }
+            else if (!_fileManager.HasExtenssion(uploadFile, new string[] { ".jpeg", ".png", ".jpg" }))
+            {
+                ModelState.AddModelError("PhotoExError", "Valid extenssions of photo are .jpg, .png, .jpeg");
+            }
+            else
+            {
+                car.PhotoUrl = _fileManager.UploadedFile(uploadFile, "images/Transport");
+            }
+
             if (ModelState.IsValid)
             {
                 try
@@ -145,11 +163,22 @@ namespace CarShop.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int CarId, int? catId, [Bind("CarId,Model,CategoryId,Price,Year,ProducerId,PhotoUrl,Description,OrderId")] Car car)
+        public async Task<IActionResult> Edit(int CarId, int? catId, IFormFile uploadFile, [Bind("CarId,Model,CategoryId,Price,Year,ProducerId,PhotoUrl,Description,OrderId")] Car car)
         {
             if (CarId != car.CarId)
             {
                 return NotFound();
+            }
+
+            if(uploadFile == null){}
+            else if (!_fileManager.HasExtenssion(uploadFile,  new string[] { ".jpeg", ".png", ".jpg"}))
+            {
+                ModelState.AddModelError("PhotoExError", "Valid extenssions of photo are .jpg, .png, .jpeg");
+            }
+            else
+            {
+                _fileManager.deleteFile(car.PhotoUrl);
+                car.PhotoUrl = _fileManager.UploadedFile(uploadFile, "images/Transport");
             }
 
             if (ModelState.IsValid)
@@ -207,6 +236,7 @@ namespace CarShop.Controllers
         public async Task<IActionResult> DeleteConfirmed(int CarId, int? categoryId)
         {
             Car car = await _context.Cars.FindAsync(CarId);
+            _fileManager.deleteFile(car.PhotoUrl);
             _context.Cars.Remove(car);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index), new { categoryId});
@@ -260,5 +290,6 @@ namespace CarShop.Controllers
 
             return cars;
         }
+        
     }
 }
