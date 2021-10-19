@@ -4,6 +4,8 @@
     ViewData["Title"] = "Create";
 }
 
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+
 <h1>Create</h1>
 
 @if (ViewBag.catId != null)
@@ -26,7 +28,7 @@ else
             </div>
             <div class="form-group">
                 <label asp-for="CategoryId" class="control-label"></label>
-                <select asp-for="CategoryId" class="form-control" asp-items="ViewBag.CategoryId">
+                <select asp-for="CategoryId" class="form-control autocompleteSelect" asp-items="ViewBag.CategoryId">
                     @if (ViewBag.catId != null)
                     {<option selected=@ViewBag.catId hidden="hidden"></option>}
                 </select>
@@ -43,7 +45,7 @@ else
             </div>
             <div class="form-group">
                 <label asp-for="ProducerId" class="control-label"></label>
-                <select asp-for="ProducerId" class="form-control" asp-items="ViewBag.ProducerId"></select>
+                <select asp-for="ProducerId" class="form-control autocompleteSelect" asp-items="ViewBag.ProducerId"></select>
             </div>
             <div class="form-group">
                 <label asp-for="Description" class="control-label"></label>

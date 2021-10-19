@@ -6,6 +6,7 @@
 <link rel="stylesheet" href="~/css/ButtonBuy.css" />
 <link rel="stylesheet" href="~/css/cartButton.css" />
 <link rel="stylesheet" href="~/css/card.css" />
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 <link rel="stylesheet" href="~/css/contentFilters.css" />
 
 <form method="get">
@@ -21,18 +22,17 @@
             <label>Maximum price</label>
         </span>
         <span>
-            <select name="producerId" asp-items="ViewBag.ProducerId">
+            <input type="number" name="year" />
+            <span class="bar"></span>
+            <label>Year</label>
+        </span>
+        <span>
+            <select class="autocompleteSelect" name="producerId" asp-items="ViewBag.Producers">
                 <option value="null">All</option>
             </select>
             <label id="spanlbl">Producer: </label>
             <span class="bar"></span>
         </span>
-        <span>
-            <input type="number" name="year" />
-            <span class="bar"></span>
-            <label>Year</label>
-        </span>
-
         <input type="submit" value="Filter" class="btn btn-buy" />
     </div>
     @Html.ValidationMessage("PriceError", new { @class = "text-danger" })
@@ -50,9 +50,9 @@ else
 
 @if (User.IsInRole("admin"))
 {
-<p>
-    <a asp-action="Create" asp-route-categoryId ="@ViewBag.categoryId"><i class="fas fa-plus-square"></i> Create New</a>
-</p>
+    <p>
+        <a asp-action="Create" asp-route-categoryId="@ViewBag.categoryId"><i class="fas fa-plus-square"></i> Create New</a>
+    </p>
 }
 <a id="button" asp-action="Index" asp-controller="Cart" asp-route-returnUrl="@ViewBag.Path"><img src="~/images/icons/shopping-cart.png" /></a>
 
