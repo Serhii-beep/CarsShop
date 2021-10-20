@@ -23,7 +23,7 @@ namespace CarShop.Controllers
         // GET: Orders
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Orders.ToListAsync());
+            return View(await _context.Orders.Include(c=>c.Warehouse).ToListAsync());
         }
 
         // GET: Orders/Details/5
@@ -34,7 +34,7 @@ namespace CarShop.Controllers
                 return NotFound();
             }
 
-            var order = await _context.Orders.Where(c => c.OrderId == id).FirstOrDefaultAsync();
+            var order = await _context.Orders.Where(c => c.OrderId == id).Include(c => c.Warehouse).FirstOrDefaultAsync();
 
             if (order == null)
             {
@@ -49,6 +49,7 @@ namespace CarShop.Controllers
         {
             ViewBag.returnUrl = returnUrl;
             ViewBag.Cars = orderedCars;
+            ViewData["WarehouseId"] = new SelectList(_context.Warehouses, "WarehouseId", "Address");
             return View();
         }
 
@@ -57,7 +58,7 @@ namespace CarShop.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(string orderedCars, [Bind("OrderId,CustomerFullName,Address")] Order order)
+        public async Task<IActionResult> Create(string orderedCars, [Bind("OrderId,CustomerFullName,WarehouseId")] Order order)
         {
             List<CartItem> cars = JsonSerializer.Deserialize<List<CartItem>>(orderedCars);
             if (ModelState.IsValid)
@@ -82,11 +83,12 @@ namespace CarShop.Controllers
                 return NotFound();
             }
 
-            var order = await _context.Orders.Where(c => c.OrderId == id).FirstOrDefaultAsync();
+            var order = await _context.Orders.Where(c => c.OrderId == id).Include(c=> c.Warehouse).FirstOrDefaultAsync();
             if (order == null)
             {
                 return NotFound();
             }
+            ViewData["WarehouseId"] = new SelectList(_context.Warehouses, "WarehouseId", "Address");
             return View(order);
         }
 
@@ -95,7 +97,7 @@ namespace CarShop.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int Orderid, [Bind("OrderId,CustomerFullName,Address")] Order order)
+        public async Task<IActionResult> Edit(int Orderid, [Bind("OrderId,CustomerFullName, WarehouseId")] Order order)
         {
             if (Orderid != order.OrderId)
             {

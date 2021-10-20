@@ -23,6 +23,7 @@ namespace CarShop
         public virtual DbSet<Category> Categories { get; set; }
         public virtual DbSet<Order> Orders { get; set; }
         public virtual DbSet<Producer> Producers { get; set; }
+        public virtual DbSet<Warehouse> Warehouses { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -65,6 +66,12 @@ namespace CarShop
                     .HasForeignKey(d => d.ProducerId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Cars_Producers");
+
+                entity.HasOne(d => d.Warehouse)
+                    .WithMany(p => p.Cars)
+                    .HasForeignKey(d => d.WarehouseId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Cars_Warehouses");
             });
 
             modelBuilder.Entity<Category>(entity =>
@@ -76,13 +83,23 @@ namespace CarShop
 
             modelBuilder.Entity<Order>(entity =>
             {
-                entity.Property(e => e.Address)
-                    .IsRequired()
-                    .HasMaxLength(50);
 
                 entity.Property(e => e.CustomerFullName)
                     .IsRequired()
                     .HasMaxLength(50);
+                entity.HasOne(d => d.Warehouse)
+                    .WithMany(p => p.Orders)
+                    .HasForeignKey(d => d.WarehouseId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Orders_Warehouses");
+            });
+            modelBuilder.Entity<Warehouse>(entity =>
+            {
+
+                entity.Property(e => e.Address)
+                    .IsRequired()
+                    .HasMaxLength(70);
+                
             });
 
             modelBuilder.Entity<Producer>(entity =>

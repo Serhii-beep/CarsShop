@@ -30,7 +30,9 @@ else
                 <label asp-for="CategoryId" class="control-label"></label>
                 <select asp-for="CategoryId" class="form-control autocompleteSelect" asp-items="ViewBag.CategoryId">
                     @if (ViewBag.catId != null)
-                    {<option selected=@ViewBag.catId hidden="hidden"></option>}
+                    {
+                        <option selected=@ViewBag.catId hidden="hidden"></option>
+}
                 </select>
             </div>
             <div class="form-group">
@@ -46,6 +48,10 @@ else
             <div class="form-group">
                 <label asp-for="ProducerId" class="control-label"></label>
                 <select asp-for="ProducerId" class="form-control autocompleteSelect" asp-items="ViewBag.ProducerId"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="Warehouse" class="control-label"></label>
+                <select asp-for="WarehouseId" class="form-control" asp-items="ViewBag.WarehouseId"></select>
             </div>
             <div class="form-group">
                 <label asp-for="Description" class="control-label"></label>

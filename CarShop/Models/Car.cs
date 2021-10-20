@@ -31,8 +31,12 @@ namespace CarShop
         public string Description { get; set; }
         public int? OrderId { get; set; }
 
+        public int WarehouseId { get; set; }
+
         [JsonIgnore]
         public virtual Category Category { get; set; }
+        [JsonIgnore]
+        public virtual Warehouse Warehouse { get; set; }
         [JsonIgnore]
         public virtual Order Order { get; set; }
         public virtual Producer Producer { get; set; }
