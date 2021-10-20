@@ -24,7 +24,15 @@ namespace CarShop.Controllers
         [HttpGet]
         public ActionResult<IEnumerable<Producer>> GetAllProducers()
         {
-            return Ok(_context.Producers.ToList());
+            string producers = "{\"results\":[";
+            foreach(var producer in _context.Producers.ToList())
+            {
+                producers += $"{{ \"id\": {producer.ProducerId}, \"text\": \"{producer.Name}\" }},";
+                
+            }
+            producers = producers.Remove(producers.Length - 1);
+            producers += "]}";
+            return Ok(producers);
         }
 
         // GET: api/ProducersApi/5

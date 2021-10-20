@@ -26,10 +26,14 @@ namespace CarShop.Controllers
         // GET: Cars
         public async Task<IActionResult> Index(int? categoryId, int? minPrice, int? maxPrice, int? producerId, int? year)
         {
-            ViewData["ProducerId"] = new SelectList(_context.Producers, "ProducerId", "Name");
             ViewBag.categoryId = categoryId;
             ViewBag.Path = HttpContext.Request.Path + HttpContext.Request.QueryString;
-
+            List<SelectListItem> producers = new List<SelectListItem>();
+            foreach(var producer in _context.Producers.ToList())
+            {
+                producers.Add(new SelectListItem { Text = producer.Name, Value = producer.ProducerId.ToString() });
+            }
+            ViewBag.Producers = producers;
             IEnumerable<Car> cars = await _context.Cars.Include(c => c.Producer).ToListAsync();
 
             if (minPrice > maxPrice)
@@ -89,7 +93,6 @@ namespace CarShop.Controllers
             }
 
             ViewData["CategoryId"] = new SelectList(_context.Categories, "CategoryId", "Name");
-            ViewData["OrderId"] = new SelectList(_context.Orders, "OrderId", "CustomerFullName");
             ViewData["ProducerId"] = new SelectList(_context.Producers, "ProducerId", "Name");
             ViewData["WarehouseId"] = new SelectList(_context.Warehouses, "WarehouseId", "Address");
             return View();
@@ -127,7 +130,6 @@ namespace CarShop.Controllers
                 return RedirectToAction(nameof(Index), new { categoryId = catId });
             }
             ViewData["CategoryId"] = new SelectList(_context.Categories, "CategoryId", "Name", car.CategoryId);
-            ViewData["OrderId"] = new SelectList(_context.Orders, "OrderId", "CustomerFullName", car.OrderId);
             ViewData["ProducerId"] = new SelectList(_context.Producers, "ProducerId", "Name", car.ProducerId);
             ViewData["WarehouseId"] = new SelectList(_context.Warehouses, "WarehouseId", "Address", car.WarehouseId);
             return View(car);
@@ -155,7 +157,6 @@ namespace CarShop.Controllers
                 return NotFound();
             }
             ViewData["CategoryId"] = new SelectList(_context.Categories, "CategoryId", "Name", car.CategoryId);
-            ViewData["OrderId"] = new SelectList(_context.Orders, "OrderId", "CustomerFullName", car.OrderId);
             ViewData["ProducerId"] = new SelectList(_context.Producers, "ProducerId", "Name", car.ProducerId);
             ViewData["WarehouseId"] = new SelectList(_context.Warehouses, "WarehouseId", "Address", car.WarehouseId);
             return View(car);
@@ -205,7 +206,6 @@ namespace CarShop.Controllers
                 return RedirectToAction(nameof(Index), new { categoryId = catId});
             }
             ViewData["CategoryId"] = new SelectList(_context.Categories, "CategoryId", "Name", car.CategoryId);
-            ViewData["OrderId"] = new SelectList(_context.Orders, "OrderId", "CustomerFullName", car.OrderId);
             ViewData["ProducerId"] = new SelectList(_context.Producers, "ProducerId", "Name", car.ProducerId);
             ViewData["WarehouseId"] = new SelectList(_context.Warehouses, "WarehouseId", "Address", car.WarehouseId);
             return View(car);
