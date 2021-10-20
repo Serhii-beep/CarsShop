@@ -16,9 +16,10 @@ namespace CarShop
         [Display(Name = "Customer Full Name")]
         [Required(ErrorMessage ="Required field")]
         public string CustomerFullName { get; set; }
-        [Required(ErrorMessage = "Required field")]
-        public string Address { get; set; }
 
+        public int WarehouseId { get; set; }
         public virtual ICollection<Car> Cars { get; set; }
+
+        public virtual Warehouse Warehouse { get; set; }
     }
 }

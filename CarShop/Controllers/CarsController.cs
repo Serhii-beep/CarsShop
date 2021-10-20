@@ -63,7 +63,7 @@ namespace CarShop.Controllers
                 return NotFound();
             }
 
-            var car = await _context.Cars.Where(c => c.CarId == id).Include(c => c.Category).Include(c => c.Producer).FirstOrDefaultAsync();
+            var car = await _context.Cars.Where(c => c.CarId == id).Include(c => c.Category).Include(c => c.Producer).Include(c=>c.Warehouse).FirstOrDefaultAsync();
             if (car == null)
             {
                 return NotFound();
@@ -91,13 +91,14 @@ namespace CarShop.Controllers
             ViewData["CategoryId"] = new SelectList(_context.Categories, "CategoryId", "Name");
             ViewData["OrderId"] = new SelectList(_context.Orders, "OrderId", "CustomerFullName");
             ViewData["ProducerId"] = new SelectList(_context.Producers, "ProducerId", "Name");
+            ViewData["WarehouseId"] = new SelectList(_context.Warehouses, "WarehouseId", "Address");
             return View();
         }
 
         // POST: Cars/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(int? catId, IFormFile uploadFile, [Bind("CarId,Model,CategoryId,Price,Year,ProducerId,PhotoUrl,Description,OrderId")] Car car)
+        public async Task<IActionResult> Create(int? catId, IFormFile uploadFile, [Bind("CarId,Model,CategoryId,Price,Year,ProducerId,PhotoUrl,Description,OrderId,WarehouseId")] Car car)
         {
             if (uploadFile == null)
             {
@@ -128,6 +129,7 @@ namespace CarShop.Controllers
             ViewData["CategoryId"] = new SelectList(_context.Categories, "CategoryId", "Name", car.CategoryId);
             ViewData["OrderId"] = new SelectList(_context.Orders, "OrderId", "CustomerFullName", car.OrderId);
             ViewData["ProducerId"] = new SelectList(_context.Producers, "ProducerId", "Name", car.ProducerId);
+            ViewData["WarehouseId"] = new SelectList(_context.Warehouses, "WarehouseId", "Address", car.WarehouseId);
             return View(car);
         }
 
@@ -146,7 +148,7 @@ namespace CarShop.Controllers
                 return NotFound();
             }
 
-            var car = await _context.Cars.Where(c => c.CarId == id).Include(c => c.Category).Include(c => c.Producer).FirstOrDefaultAsync();
+            var car = await _context.Cars.Where(c => c.CarId == id).Include(c => c.Category).Include(c => c.Producer).Include(c=>c.Warehouse).FirstOrDefaultAsync();
 
             if (car == null)
             {
@@ -155,6 +157,7 @@ namespace CarShop.Controllers
             ViewData["CategoryId"] = new SelectList(_context.Categories, "CategoryId", "Name", car.CategoryId);
             ViewData["OrderId"] = new SelectList(_context.Orders, "OrderId", "CustomerFullName", car.OrderId);
             ViewData["ProducerId"] = new SelectList(_context.Producers, "ProducerId", "Name", car.ProducerId);
+            ViewData["WarehouseId"] = new SelectList(_context.Warehouses, "WarehouseId", "Address", car.WarehouseId);
             return View(car);
         }
 
@@ -163,7 +166,7 @@ namespace CarShop.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int CarId, int? catId, IFormFile uploadFile, [Bind("CarId,Model,CategoryId,Price,Year,ProducerId,PhotoUrl,Description,OrderId")] Car car)
+        public async Task<IActionResult> Edit(int CarId, int? catId, IFormFile uploadFile, [Bind("CarId,Model,CategoryId,Price,Year,ProducerId,PhotoUrl,Description,OrderId,WarehouseId")] Car car)
         {
             if (CarId != car.CarId)
             {
@@ -204,6 +207,7 @@ namespace CarShop.Controllers
             ViewData["CategoryId"] = new SelectList(_context.Categories, "CategoryId", "Name", car.CategoryId);
             ViewData["OrderId"] = new SelectList(_context.Orders, "OrderId", "CustomerFullName", car.OrderId);
             ViewData["ProducerId"] = new SelectList(_context.Producers, "ProducerId", "Name", car.ProducerId);
+            ViewData["WarehouseId"] = new SelectList(_context.Warehouses, "WarehouseId", "Address", car.WarehouseId);
             return View(car);
         }
 
@@ -220,7 +224,7 @@ namespace CarShop.Controllers
                 return NotFound();
             }
 
-            var car = await _context.Cars.Where(c => c.CarId == id).Include(c => c.Category).Include(c => c.Producer).FirstOrDefaultAsync();
+            var car = await _context.Cars.Where(c => c.CarId == id).Include(c => c.Category).Include(c => c.Producer).Include(c=>c.Warehouse).FirstOrDefaultAsync();
 
             if (car == null)
             {
