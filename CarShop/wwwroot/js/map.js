@@ -44,6 +44,7 @@ function initLocations(data) {
         })(marker, i));
     }
 }
+
 function initMap() {
 
     
@@ -52,7 +53,7 @@ function initMap() {
         zoom: 4,
     });
    
-    fetch("https://localhost:44326/api/WarehousesApi").then(response => response.json()).then(data => initLocations(data));
+    fetch("https://localhost:44390/api/WarehousesApi").then(response => response.json()).then(data => initLocations(data));
 
 }
 

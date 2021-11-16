@@ -24,14 +24,14 @@ namespace CarShop.Controllers
         }
 
         // GET: Cars
-        public async Task<IActionResult> Index(int? categoryId, int? minPrice, int? maxPrice, int? producerId, int? year)
+        public async Task<IActionResult> Index(int? categoryId, int? minPrice, int? maxPrice, string producerId, int? year)
         {
             ViewBag.categoryId = categoryId;
             ViewBag.Path = HttpContext.Request.Path + HttpContext.Request.QueryString;
             List<SelectListItem> producers = new List<SelectListItem>();
             foreach(var producer in _context.Producers.ToList())
             {
-                producers.Add(new SelectListItem { Text = producer.Name, Value = producer.ProducerId.ToString() });
+                producers.Add(new SelectListItem { Text = producer.Name, Value = producer.Name });
             }
             ViewBag.Producers = producers;
             IEnumerable<Car> cars = await _context.Cars.Include(c => c.Producer).ToListAsync();
@@ -273,11 +273,11 @@ namespace CarShop.Controllers
 
             return selected;
         }
-        private IEnumerable<Car> GetFiltredCars(IEnumerable<Car> cars,int? minPrice, int? maxPrice, int? producerId, int? year)
+        private IEnumerable<Car> GetFiltredCars(IEnumerable<Car> cars, int? minPrice, int? maxPrice, string producerId, int? year)
         {
-            if (producerId != null)
+            if (!string.IsNullOrEmpty(producerId))
             {
-                cars = cars.Where(c => c.ProducerId == producerId);
+                cars = cars.Where(c => c.Producer.Name.Contains(producerId));
             }
             if (year != null)
             {
