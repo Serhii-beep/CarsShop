@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Http;
 using System.IO;
 namespace CarShop.Controllers
 {
+    [Authorize]
     public class CarsController : Controller
     {
         private readonly DbCarShopContext _context;
@@ -24,6 +25,7 @@ namespace CarShop.Controllers
         }
 
         // GET: Cars
+        [AllowAnonymous]
         public async Task<IActionResult> Index(int? categoryId, int? minPrice, int? maxPrice, string producerId, int? year)
         {
             ViewBag.categoryId = categoryId;
@@ -57,6 +59,7 @@ namespace CarShop.Controllers
         }
 
         // GET: Cars/Details/5
+        [AllowAnonymous]
         public async Task<IActionResult> Details(int? id, int? categoryId)
         {
             ViewBag.Path = HttpContext.Request.Path + HttpContext.Request.QueryString;
@@ -82,10 +85,6 @@ namespace CarShop.Controllers
         // GET: Cars/Create
         public IActionResult Create(int? categoryId)
         {
-            if(!User.IsInRole("admin"))
-            {
-                return RedirectToAction("Index", "Cars");
-            }
             ViewBag.catId = categoryId;
             if (categoryId != null)
             {
@@ -138,10 +137,6 @@ namespace CarShop.Controllers
         // GET: Cars/Edit/5
         public async Task<IActionResult> Edit(int? id, int? categoryId)
         {
-            if (!User.IsInRole("admin"))
-            {
-                return RedirectToAction("Index", "Cars");
-            }
 
             ViewBag.catId = categoryId;
 
@@ -214,10 +209,7 @@ namespace CarShop.Controllers
         // GET: Cars/Delete/5
         public async Task<IActionResult> Delete(int? id, int? categoryId)
         {
-            if (!User.IsInRole("admin"))
-            {
-                return RedirectToAction("Index", "Cars");
-            }
+
             ViewBag.categoryId = categoryId;
             if (id == null)
             {
@@ -250,7 +242,7 @@ namespace CarShop.Controllers
         {
             return _context.Cars.Any(e => e.CarId == id);
         }
-
+        [AllowAnonymous]
         private List<Car> GetNRandomCars(List<Car> cars, int n )
         {
             if(cars.Count <= n)
@@ -273,6 +265,7 @@ namespace CarShop.Controllers
 
             return selected;
         }
+        [AllowAnonymous]
         private IEnumerable<Car> GetFiltredCars(IEnumerable<Car> cars, int? minPrice, int? maxPrice, string producerId, int? year)
         {
             if (!string.IsNullOrEmpty(producerId))

@@ -6,9 +6,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using CarShop.FileManager;
+using Microsoft.AspNetCore.Authorization;
 
 namespace CarShop.Controllers
 {
+    [Authorize]
     public class ProducersController : Controller
     {
         private readonly DbCarShopContext _context;
@@ -28,6 +30,7 @@ namespace CarShop.Controllers
         }
 
         // GET: Producers/Details/5
+        [AllowAnonymous]
         public async Task<IActionResult> Details(int? id, int? CarId, string returnUrl)
         {
             ViewBag.CarId = CarId;
@@ -49,10 +52,6 @@ namespace CarShop.Controllers
         // GET: Producers/Create
         public IActionResult Create()
         {
-            if (!User.IsInRole("admin"))
-            {
-                return RedirectToAction("Index", "Cars");
-            }
             return View();
         }
 
@@ -88,10 +87,6 @@ namespace CarShop.Controllers
         // GET: Producers/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (!User.IsInRole("admin"))
-            {
-                return RedirectToAction("Index", "Cars");
-            }
             if (id == null)
             {
                 return NotFound();
@@ -154,10 +149,6 @@ namespace CarShop.Controllers
         // GET: Producers/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (!User.IsInRole("admin"))
-            {
-                return RedirectToAction("Index", "Cars");
-            }
             if (id == null)
             {
                 return NotFound();

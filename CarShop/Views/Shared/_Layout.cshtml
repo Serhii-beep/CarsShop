@@ -1,6 +1,4 @@
-﻿@using Microsoft.AspNetCore.Identity;
-@inject SignInManager<User> _signInManager
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -13,11 +11,11 @@
 </head>
 <body>
     <div class="small-nav">
-        @if (_signInManager.IsSignedIn(User))
+        @if (User.Identity.IsAuthenticated)
         {
         <form method="post" , asp-action="Logout" asp-controller="Account">
             <button id="logout" class="nav-btn" type="submit">Log out</button>
-            <label id="logoutlbl">@User.Identity.Name</label>
+            <label id="logoutlbl">@User.Claims.ElementAtOrDefault(4).Value</label>
         </form>
         }
         else
@@ -35,13 +33,12 @@
                         <a asp-controller="Cars" asp-action="Index" asp-route-categoryId="null">Car Shop</a>
                     </div>
                 </div>
-                @if (User.IsInRole("admin"))
+                @if (User.Identity.IsAuthenticated)
                 {
                     <li><a asp-controller="Categories" asp-action="Index"><i class="fas fa-cog"></i> Manage categories</a></li>
                     <li><a asp-controller="Producers" asp-action="Index"><i class="fas fa-cog"></i> Manage producers</a></li>
                     <li><a asp-controller="Orders" asp-action="Index"><i class="fas fa-cog"></i> Manage orders</a></li>
                     <li><a asp-controller="Warehouses" asp-action="Index"><i class="fas fa-cog"></i> Manage Warehouses</a></li>
-                    <li><a asp-controller="Users" asp-action="Index"><i class="fas fa-users"></i> Manage Users</a></li>
                 }
 
                 <li class="dropdown">

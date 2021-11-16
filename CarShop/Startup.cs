@@ -34,18 +34,8 @@ namespace CarShop
             services.AddDbContext<DbCarShopContext>(options => options.UseSqlServer(connection));
 
 
-            string connectionIdentity = Configuration.GetConnectionString("IdentityConnection");
-            services.AddDbContext<IdentityContext>(options => options.UseSqlServer(connectionIdentity));
             services.AddControllersWithViews();
-            services.AddIdentity<User, IdentityRole>(opts =>
-            {
-                opts.Password.RequiredLength = 5;
-                opts.Password.RequireNonAlphanumeric = false;
-                opts.Password.RequireLowercase = false;
-                opts.Password.RequireUppercase = false;
-                opts.Password.RequireDigit = false;
-                opts.Password.RequiredUniqueChars = 0;
-            }).AddEntityFrameworkStores<IdentityContext>().AddDefaultTokenProviders();
+
 
 
             services.AddAuthentication(options =>

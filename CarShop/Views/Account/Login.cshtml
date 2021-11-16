@@ -4,24 +4,9 @@
 
 <div class="row">
     <div class="col-md-4">
-        <form method="post" asp-controller="Account" asp-action="Login">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Email" class="control-label"></label><br />
-                <input asp-for="Email" class="form-control" autocomplete="off" />
-                <span asp-validation-for="Email" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Password" class="control-label"></label><br />
-                <input asp-for="Password" class="form-control" autocomplete="off" />
-                <span asp-validation-for="Password" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Log in" class="btn btn-primary" />
-            </div>
-        </form>
-        <p > <a asp-action="GoogleLogin" asp-controller="Account">Google login</a></p>
+        <div class="g-signin2"> <a asp-action="Login" asp-controller="Account"> </a></div>
     </div>
 </div>
 
-@Html.ActionLink("Forgot password?", "ForgotPassword", "Account")
+
+<script src="https://apis.google.com/js/platform.js" async defer></script>
