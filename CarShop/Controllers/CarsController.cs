@@ -57,6 +57,9 @@ namespace CarShop.Controllers
                 return View(cars.Where(c=>c.CategoryId == categoryId));
             }
         }
+                       
+
+
 
         // GET: Cars/Details/5
         [AllowAnonymous]
