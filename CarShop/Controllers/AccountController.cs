@@ -8,7 +8,9 @@ using CarShop.Models;
 using CarShop.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication;
-
+using Microsoft.AspNetCore.Authentication.Google;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.OAuth;
 namespace CarShop.Controllers
 {
     public class AccountController : Controller
@@ -192,5 +194,36 @@ namespace CarShop.Controllers
             return View(model);
         }
 
+        [AllowAnonymous]
+        public async Task  GoogleLogin()
+        {
+            await HttpContext.ChallengeAsync(GoogleDefaults.AuthenticationScheme, new AuthenticationProperties()
+            {
+                RedirectUri = Url.Action("Index", "Cars")
+            });
+        }
+       
+        public async Task<IActionResult> GoogleResponse()
+        {
+            var result = await HttpContext.AuthenticateAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+
+            var claims = result.Principal.Identities.FirstOrDefault()
+                .Claims.Select(claim => new
+                {
+                    claim.Issuer,
+                    claim.OriginalIssuer,
+                    claim.Type,
+                    claim.Value
+                }
+                );
+
+            return Json(claims);
+        }
+
+        public async Task<IActionResult> LogoutGoogle()
+        {
+            await HttpContext.SignOutAsync();
+            return RedirectToAction("Index", "Cars");
+        }
     }
 }
