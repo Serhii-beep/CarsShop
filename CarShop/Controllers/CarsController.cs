@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Http;
 using System.IO;
 namespace CarShop.Controllers
 {
+    [Authorize]
     public class CarsController : Controller
     {
         private readonly DbCarShopContext _context;
@@ -22,7 +23,7 @@ namespace CarShop.Controllers
             _context = context;
             _fileManager = fileManager;
         }
-
+        [AllowAnonymous]
         // GET: Cars
         public async Task<IActionResult> Index(int? categoryId, int? minPrice, int? maxPrice, string producerId, int? year)
         {

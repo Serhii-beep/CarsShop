@@ -7,11 +7,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CarShop.Models
 {
-    public class IdentityContext : IdentityDbContext<User>
+    public class IdentityContext /*: IdentityDbContext<User>*/
     {
-        public IdentityContext(DbContextOptions<IdentityContext> options) : base(options)
-        {
-            Database.EnsureCreated();
-        }
+        //public IdentityContext(DbContextOptions<IdentityContext> options) : base(options)
+        //{
+        //    Database.EnsureCreated();
+        //}
     }
 }

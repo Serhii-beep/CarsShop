@@ -1,5 +1,5 @@
 ﻿@using Microsoft.AspNetCore.Identity;
-@inject SignInManager<User> _signInManager
+@*@inject SignInManager<User> _signInManager*@
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -13,18 +13,18 @@
 </head>
 <body>
     <div class="small-nav">
-        @if (_signInManager.IsSignedIn(User))
-        {
+        @*@if (_signInManager.IsSignedIn(User))
+        {*@
         <form method="post" , asp-action="Logout" asp-controller="Account">
             <button id="logout" class="nav-btn" type="submit">Log out</button>
             <label id="logoutlbl">@User.Identity.Name</label>
         </form>
-        }
-        else
-        {
+        @*}*@
+        @*else
+        {*@
             <a class="nav-btn" asp-action="Register" asp-controller="Account">Register</a>
-            <a class="nav-btn" asp-action="Login" asp-controller="Account">Log in</a>
-        }
+            <a class="nav-btn" asp-action="GoogleLogin" asp-controller="Account">Log in</a>
+        @*}*@
     </div>
     <div id="wrapper">
         <div class="overlay"></div>
