@@ -13,16 +13,15 @@
     <div class="small-nav">
         @if (User.Identity.IsAuthenticated)
         {
-        <form method="post" , asp-action="Logout" asp-controller="Account">
-            <button id="logout" class="nav-btn" type="submit">Log out</button>
-            <label id="logoutlbl">@User.Claims.ElementAtOrDefault(4).Value</label>
-        </form>
-        @*}*@
-        @*else
-        {*@
-            <a class="nav-btn" asp-action="Register" asp-controller="Account">Register</a>
-            <a class="nav-btn" asp-action="GoogleLogin" asp-controller="Account">Log in</a>
-        @*}*@
+            <form method="post" , asp-action="Logout" asp-controller="Account">
+                <button id="logout" class="nav-btn" type="submit">Log out</button>
+                <label id="logoutlbl">@User.Claims.ElementAtOrDefault(4).Value</label>
+            </form>
+        }
+        else
+        {
+            <a class="nav-btn" asp-action="Login" asp-controller="Account">Log in</a>
+        }
     </div>
     <div id="wrapper">
         <div class="overlay"></div>

@@ -5,7 +5,7 @@ $(document).ready(function () {
     });
     $('#inputProducer').on('keyup', complete);
     function complete() {
-        let input, filter, table, cards, td, i, txtValue;
+        let input, filter, table, cards, txtValue;
         input = document.getElementById("inputProducer");
         filter = input.value.toUpperCase();
         table = document.getElementById("mainTable");

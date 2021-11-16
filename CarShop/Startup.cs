@@ -35,22 +35,7 @@ namespace CarShop
 
 
             services.AddControllersWithViews();
-            services.AddCors(options =>
-            {
-                options.AddPolicy("AllOrigins", builder =>
-                {
-                    builder.AllowAnyHeader().AllowAnyOrigin().AllowAnyMethod();
-                });
-            });
-            //services.AddIdentity<User, IdentityRole>(opts =>
-            //{
-            //    opts.Password.RequiredLength = 5;
-            //    opts.Password.RequireNonAlphanumeric = false;
-            //    opts.Password.RequireLowercase = false;
-            //    opts.Password.RequireUppercase = false;
-            //    opts.Password.RequireDigit = false;
-            //    opts.Password.RequiredUniqueChars = 0;
-            //}).AddEntityFrameworkStores<IdentityContext>().AddDefaultTokenProviders();
+
 
 
             services.AddAuthentication(options =>
@@ -58,6 +43,7 @@ namespace CarShop
                 options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
                 options.DefaultChallengeScheme = GoogleDefaults.AuthenticationScheme;
             })
+            .AddCookie()
             .AddGoogle(options =>
             {
                 IConfigurationSection googleAuthNSection =
@@ -80,7 +66,7 @@ namespace CarShop
         {
             if (env.IsDevelopment())
             {
-                app.UseDeveloperExceptionPage();    
+                app.UseDeveloperExceptionPage();
             }
             else
             {
@@ -94,7 +80,7 @@ namespace CarShop
 
             app.UseRouting();
 
-            app.UseCors("AllOrigins");
+
             app.UseAuthentication();
             app.UseAuthorization();
 
