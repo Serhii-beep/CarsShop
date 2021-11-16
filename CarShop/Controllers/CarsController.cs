@@ -23,7 +23,6 @@ namespace CarShop.Controllers
             _context = context;
             _fileManager = fileManager;
         }
-        [AllowAnonymous]
         // GET: Cars
         [AllowAnonymous]
         public async Task<IActionResult> Index(int? categoryId, int? minPrice, int? maxPrice, string producerId, int? year)
