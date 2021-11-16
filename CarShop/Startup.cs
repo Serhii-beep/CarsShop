@@ -34,6 +34,13 @@ namespace CarShop
             string connectionIdentity = Configuration.GetConnectionString("IdentityConnection");
             services.AddDbContext<IdentityContext>(options => options.UseSqlServer(connectionIdentity));
             services.AddControllersWithViews();
+            services.AddCors(options =>
+            {
+                options.AddPolicy("AllOrigins", builder =>
+                {
+                    builder.AllowAnyHeader().AllowAnyOrigin().AllowAnyMethod();
+                });
+            });
             services.AddIdentity<User, IdentityRole>(opts =>
             {
                 opts.Password.RequiredLength = 5;
@@ -70,7 +77,7 @@ namespace CarShop
 
             app.UseRouting();
 
-
+            app.UseCors("AllOrigins");
             app.UseAuthentication();
             app.UseAuthorization();
 
