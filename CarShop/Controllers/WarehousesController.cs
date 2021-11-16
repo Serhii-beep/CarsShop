@@ -5,8 +5,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Authorization;
+
 namespace CarShop.Controllers
 {
+    [Authorize]
     public class WarehousesController : Controller
     {
 
@@ -51,10 +55,6 @@ namespace CarShop.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("WarehouseId,Address,Latitude,Longitude")] Warehouse warehouse)
         {
-            if (!User.IsInRole("admin"))
-            {
-                return RedirectToAction("Index", "Cars");
-            }
             if (ModelState.IsValid)
             {
                 _context.Add(warehouse);
@@ -67,10 +67,6 @@ namespace CarShop.Controllers
         // GET: WarehousesController/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (!User.IsInRole("admin"))
-            {
-                return RedirectToAction("Index", "Cars");
-            }
             if (id == null)
             {
                 return NotFound();
@@ -121,10 +117,6 @@ namespace CarShop.Controllers
         // GET: WarehousesController/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (!User.IsInRole("admin"))
-            {
-                return RedirectToAction("Index", "Cars");
-            }
             if (id == null)
             {
                 return NotFound();

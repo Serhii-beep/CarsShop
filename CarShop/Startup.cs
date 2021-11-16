@@ -34,8 +34,6 @@ namespace CarShop
             services.AddDbContext<DbCarShopContext>(options => options.UseSqlServer(connection));
 
 
-            string connectionIdentity = Configuration.GetConnectionString("IdentityConnection");
-            //services.AddDbContext<IdentityContext>(options => options.UseSqlServer(connectionIdentity));
             services.AddControllersWithViews();
             services.AddCors(options =>
             {
@@ -58,20 +56,16 @@ namespace CarShop
             services.AddAuthentication(options =>
             {
                 options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                //options.DefaultChallengeScheme = GoogleDefaults.AuthenticationScheme;
-            })
-            .AddCookie(options =>
-            {
-                options.LoginPath = "/account/google-login";
+                options.DefaultChallengeScheme = GoogleDefaults.AuthenticationScheme;
             })
             .AddGoogle(options =>
             {
-                //IConfigurationSection googleAuthNSection =
-                //    Configuration.GetSection("Authentication:Google");
+                IConfigurationSection googleAuthNSection =
+                    Configuration.GetSection("Authentication:Google");
 
-                options.ClientId = "886457074364-uls5i7hpero1p0jt66mojviktpctq8vu.apps.googleusercontent.com"; //googleAuthNSection["ClientId"];
-                options.ClientSecret = "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"; //googleAuthNSection["ClientSecret"];
-                //options.ClaimActions.MapJsonKey("urn:google:picture", "picture", "url");
+                options.ClientId = googleAuthNSection["ClientId"];
+                options.ClientSecret = googleAuthNSection["ClientSecret"];
+                options.ClaimActions.MapJsonKey("urn:google:picture", "picture", "url");
             });
 
             services.AddDistributedMemoryCache();

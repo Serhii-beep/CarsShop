@@ -9,9 +9,10 @@ using CarShop;
 using CarShop.Models;
 using System.Text.Json;
 using Microsoft.AspNetCore.Authorization;
+
 namespace CarShop.Controllers
 {
-    [Authorize(Roles = "admin")]
+    [Authorize]
     public class OrdersController : Controller
     {
         private readonly DbCarShopContext _context;
@@ -74,10 +75,6 @@ namespace CarShop.Controllers
         // GET: Orders/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (!User.IsInRole("admin"))
-            {
-                return RedirectToAction("Index", "Cars");
-            }
             if (id == null)
             {
                 return NotFound();

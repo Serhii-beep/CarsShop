@@ -34,7 +34,7 @@
     </div>
     <hr />
     <div>
-        @if (User.IsInRole("admin"))
+        @if (User.Identity.IsAuthenticated)
         {
         <a asp-action="Edit" asp-route-id="@Model.ProducerId">Edit</a>
         <i>|</i>

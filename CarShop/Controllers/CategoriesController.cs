@@ -6,9 +6,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using CarShop;
-
+using Microsoft.AspNetCore.Authorization;
 namespace CarShop.Controllers
 {
+    [Authorize]
     public class CategoriesController : Controller
     {
         private readonly DbCarShopContext _context;
@@ -55,10 +56,6 @@ namespace CarShop.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("CategoryId,Name")] Category category)
         {
-            if (!User.IsInRole("admin"))
-            {
-                return RedirectToAction("Index", "Cars");
-            }
             if (ModelState.IsValid)
             {
                 _context.Add(category);
@@ -71,10 +68,6 @@ namespace CarShop.Controllers
         // GET: Categories/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (!User.IsInRole("admin"))
-            {
-                return RedirectToAction("Index", "Cars");
-            }
             if (id == null)
             {
                 return NotFound();
@@ -127,10 +120,6 @@ namespace CarShop.Controllers
         // GET: Categories/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (!User.IsInRole("admin"))
-            {
-                return RedirectToAction("Index", "Cars");
-            }
             if (id == null)
             {
                 return NotFound();
