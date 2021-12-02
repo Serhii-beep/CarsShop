@@ -25,7 +25,7 @@ namespace CarShop.Controllers
         }
         // GET: Cars
         [AllowAnonymous]
-        public async Task<IActionResult> Index(int? categoryId, int? minPrice, int? maxPrice, string producerId, int? year)
+        public async Task<IActionResult> Index(int? categoryId)
         {
             ViewBag.categoryId = categoryId;
             ViewBag.Path = HttpContext.Request.Path + HttpContext.Request.QueryString;
@@ -36,16 +36,6 @@ namespace CarShop.Controllers
             }
             ViewBag.Producers = producers;
             IEnumerable<Car> cars = await _context.Cars.Include(c => c.Producer).ToListAsync();
-
-            if (minPrice > maxPrice)
-            {
-                ModelState.AddModelError("PriceError", "Max price less than min price");
-            }
-            else
-            {
-                cars = GetFiltredCars(cars, minPrice, maxPrice, producerId, year);
-            }
-
             if (categoryId == null)
             {
                 return View(cars);
@@ -266,29 +256,6 @@ namespace CarShop.Controllers
             }
 
             return selected;
-        }
-        [AllowAnonymous]
-        private IEnumerable<Car> GetFiltredCars(IEnumerable<Car> cars, int? minPrice, int? maxPrice, string producerId, int? year)
-        {
-            if (!string.IsNullOrEmpty(producerId))
-            {
-                cars = cars.Where(c => c.Producer.Name.Contains(producerId));
-            }
-            if (year != null)
-            {
-                cars = cars.Where(c => c.Year == year);
-            }
-            if (minPrice != null)
-            {
-                cars = cars.Where(c => c.Price >= minPrice);
-            }
-            if(maxPrice != null)
-            {
-                cars = cars.Where(c => c.Price <= maxPrice);
-            }
-
-            return cars;
-        }
-        
+        }        
     }
 }

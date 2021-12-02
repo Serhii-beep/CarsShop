@@ -9,32 +9,30 @@
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 <link rel="stylesheet" href="~/css/contentFilters.css" />
 
-<form method="get">
-    <div class="form-inline form-group">
-        <span>
-            <input type="number" name="minPrice" />
-            <span class="bar"></span>
-            <label>Minimum price</label>
-        </span>
-        <span>
-            <input type="number" name="maxPrice" />
-            <span class="bar"></span>
-            <label>Maximum price</label>
-        </span>
-        <span>
-            <input type="number" name="year" />
-            <span class="bar"></span>
-            <label>Year</label>
-        </span>
-        <span>
-            <input id="inputProducer" type="text" name="producer" autocomplete="off" />
-            <span class="bar"></span>
-            <label>Producer</label>
-        </span>
-        <input type="submit" value="Filter" class="btn btn-buy" />
-    </div>
-    @Html.ValidationMessage("PriceError", new { @class = "text-danger" })
-</form>
+
+<div class="form-inline form-group">
+    <span>
+        <input id="inputMinPrice" type="number" />
+        <span class="bar"></span>
+        <label>Minimum price</label>
+    </span>
+    <span>
+        <input id="inputMaxPrice" type="number" />
+        <span class="bar"></span>
+        <label>Maximum price</label>
+    </span>
+    <span>
+        <input id="inputYear" type="number" />
+        <span class="bar"></span>
+        <label>Year</label>
+    </span>
+    <span>
+        <input id="inputProducer" type="text" autocomplete="off" />
+        <span class="bar"></span>
+        <label>Producer</label>
+    </span>
+</div>
+
 
 
 @if (ViewBag.CategoryName != null)
@@ -57,7 +55,8 @@ else
 <main id="mainTable" class="cards row-3">
     @foreach (var item in Model)
     {
-        <div class="card" onclick="cardClick(@item.CarId)">
+        <div class="card" onclick="cardClick(@item.CarId)" data-producer="@item.Producer.Name"
+             data-year="@item.Year" data-price="@item.Price">
             <table class="table-borderless">
                 <tbody>
                     <tr>

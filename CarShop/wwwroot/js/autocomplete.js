@@ -1,20 +1,63 @@
 ﻿
 $(document).ready(function () {
-    $('.autocompleteSelect').select2({
-        minimumInputLength: 3
-    });
-    $('#inputProducer').on('keyup', complete);
-    function complete() {
-        let input, filter, table, cards, txtValue;
-        input = document.getElementById("inputProducer");
-        filter = input.value.toUpperCase();
-        table = document.getElementById("mainTable");
-        cards = table.getElementsByClassName("card");
+    const table = document.getElementById("mainTable");
+    const cards = table.getElementsByClassName("card");
+    const producerInput = document.getElementById("inputProducer");
+    const yearInput = document.getElementById("inputYear");
+    const maxPriceInput = document.getElementById("inputMaxPrice");
+    const minPriceInput = document.getElementById("inputMinPrice");
+    let textProducer = producerInput.value.toUpperCase();
+    let textYear = yearInput.value;
+    let textMaxPrice = maxPriceInput.value;
+    let textMinPrice = minPriceInput.value;
 
+    producerInput.addEventListener('keyup', (e) => {
+        textProducer = e.target.value.toUpperCase();
+        autocomplete();
+    });
+
+    yearInput.addEventListener('keyup', (e) => {
+        textYear = parseInt(e.target.value);
+        autocomplete();
+    });
+
+    maxPriceInput.addEventListener('keyup', (e) => {
+        textMaxPrice = parseInt(e.target.value);
+        autocomplete();
+    });
+
+    minPriceInput.addEventListener('keyup', (e) => {
+        textMinPrice = parseInt(e.target.value);
+        autocomplete();
+    });
+    
+    function autocomplete() {
         for (let i = 0; i < cards.length; ++i) {
-            let prod = cards[i].childNodes[1].childNodes[1].childNodes[1].childNodes[1].childNodes[3].childNodes[1];
-            txtValue = prod.innerText.split(' ')[0];
-            if (txtValue.toUpperCase().indexOf(filter) > -1) {
+            let cardProducer = cards[i].getAttribute("data-producer");
+            let cardYear = cards[i].getAttribute("data-year");
+            let cardPrice = cards[i].getAttribute("data-price");
+            let matches = true;
+            if (textProducer) {
+                if (cardProducer.toUpperCase().indexOf(textProducer.toUpperCase()) <= -1) {
+                    matches = false;
+                }
+            }
+            if (textYear) {
+                if (cardYear.toString().indexOf(textYear.toString()) <= -1) {
+                    matches = false;
+                }
+            }
+            if (textMinPrice) {
+                if (cardPrice < textMinPrice) {
+                    matches = false;
+                }
+            }
+            if (textMaxPrice) {
+                if (cardPrice > textMaxPrice) {
+                    matches = false;
+                }
+            }
+            if (matches) {
                 cards[i].style.display = "";
             } else {
                 cards[i].style.display = "none";
