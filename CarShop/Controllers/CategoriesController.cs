@@ -1,39 +1,40 @@
-﻿using System;
+﻿
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using CarShop;
 using Microsoft.AspNetCore.Authorization;
+using CarShop.DOM.Repositories;
+using CarShop.DOM.Database;
+
 namespace CarShop.Controllers
 {
     [Authorize]
     public class CategoriesController : Controller
     {
-        private readonly DbCarShopContext _context;
+        private readonly ICategoryRepository _categoryRepository;
 
-        public CategoriesController(DbCarShopContext context)
+        public CategoriesController(ICategoryRepository categoryRepository)
         {
-            _context = context;
+            _categoryRepository = categoryRepository;
         }
 
         // GET: Categories
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            return View(await _context.Categories.ToListAsync());
+            return View(_categoryRepository.GetAll());
         }
 
         // GET: Categories/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public IActionResult Details(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var category = await _context.Categories.Where(c => c.CategoryId == id).FirstOrDefaultAsync();
+            var category = _categoryRepository.GetById(id ?? default(int));
 
             if (category == null)
             {
@@ -58,22 +59,22 @@ namespace CarShop.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(category);
-                await _context.SaveChangesAsync();
+                _categoryRepository.Add(category);
+                await _categoryRepository.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
             return View(category);
         }
 
         // GET: Categories/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public IActionResult Edit(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var category = await _context.Categories.Where(c => c.CategoryId == id).FirstOrDefaultAsync();
+            var category = _categoryRepository.GetById(id ?? default(int));
 
             if (category == null)
             {
@@ -98,12 +99,12 @@ namespace CarShop.Controllers
             {
                 try
                 {
-                    _context.Update(category);
-                    await _context.SaveChangesAsync();
+                    _categoryRepository.Update(category);
+                    await _categoryRepository.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!CategoryExists(category.CategoryId))
+                    if (!_categoryRepository.Exists(category.CategoryId))
                     {
                         return NotFound();
                     }
@@ -118,14 +119,14 @@ namespace CarShop.Controllers
         }
 
         // GET: Categories/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public IActionResult Delete(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var category = await _context.Categories.Where(c => c.CategoryId == id).FirstOrDefaultAsync();
+            var category = _categoryRepository.GetById(id ?? default(int));
 
             if (category == null)
             {
@@ -138,17 +139,11 @@ namespace CarShop.Controllers
         // POST: Categories/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Delete(int Categoryid)
+        public async Task<IActionResult> Delete(int categoryId)
         {
-            Category category = await _context.Categories.FindAsync(Categoryid);
-            _context.Categories.Remove(category);
-            await _context.SaveChangesAsync();
+            _categoryRepository.Delete(categoryId);
+            await _categoryRepository.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
-        }
-
-        private bool CategoryExists(int id)
-        {
-            return _context.Categories.Any(e => e.CategoryId == id);
         }
     }
 }

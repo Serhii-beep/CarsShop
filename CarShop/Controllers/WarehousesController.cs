@@ -1,12 +1,12 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿
 using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Authorization;
+using CarShop.DOM.Repositories;
+using CarShop.DOM.Database;
 
 namespace CarShop.Controllers
 {
@@ -14,27 +14,27 @@ namespace CarShop.Controllers
     public class WarehousesController : Controller
     {
 
-        private readonly DbCarShopContext _context;
+        private readonly IWarehouseRepository _warehouseRepository;
 
-        public WarehousesController(DbCarShopContext context)
+        public WarehousesController(IWarehouseRepository warehouseRepository)
         {
-            _context = context;
+            _warehouseRepository = warehouseRepository;
         }
         // GET: WarehousesController
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            return View(await _context.Warehouses.ToListAsync());
+            return View(_warehouseRepository.GetAll());
         }
 
         // GET: WarehousesController/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public IActionResult Details(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var warehouse = await _context.Warehouses.Where(c => c.WarehouseId == id).FirstOrDefaultAsync();
+            var warehouse = _warehouseRepository.GetById(id ?? default(int));
 
             if (warehouse == null)
             {
@@ -57,22 +57,22 @@ namespace CarShop.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(warehouse);
-                await _context.SaveChangesAsync();
+                _warehouseRepository.Add(warehouse);
+                await _warehouseRepository.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
             return View(warehouse);
         }
 
         // GET: WarehousesController/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public IActionResult Edit(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var warehouse = await _context.Warehouses.Where(c => c.WarehouseId == id).FirstOrDefaultAsync();
+            var warehouse = _warehouseRepository.GetById(id ?? default(int));
 
             if (warehouse == null)
             {
@@ -95,12 +95,12 @@ namespace CarShop.Controllers
             {
                 try
                 {
-                    _context.Update(warehouse);
-                    await _context.SaveChangesAsync();
+                    _warehouseRepository.Update(warehouse);
+                    await _warehouseRepository.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!WarehouseExists(warehouse.WarehouseId))
+                    if (!_warehouseRepository.Exists(warehouse.WarehouseId))
                     {
                         return NotFound();
                     }
@@ -115,14 +115,14 @@ namespace CarShop.Controllers
         }
 
         // GET: WarehousesController/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public IActionResult Delete(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var warehouse = await _context.Warehouses.Where(c => c.WarehouseId == id).FirstOrDefaultAsync();
+            var warehouse = _warehouseRepository.GetById(id ?? default(int));
 
             if (warehouse == null)
             {
@@ -137,14 +137,9 @@ namespace CarShop.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(int Warehouseid)
         {
-            Warehouse warehouse = await _context.Warehouses.FindAsync(Warehouseid);
-            _context.Warehouses.Remove(warehouse);
-            await _context.SaveChangesAsync();
+            _warehouseRepository.Delete(Warehouseid);
+            await _warehouseRepository.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
-        }
-        private bool WarehouseExists(int id)
-        {
-            return _context.Warehouses.Any(e => e.WarehouseId == id);
         }
     }
 }

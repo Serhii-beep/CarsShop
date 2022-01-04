@@ -1,21 +1,18 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
-using CarShop.Models;
 using CarShop.FileManager;
 using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
+using CarShop.DAL.Data;
+using CarShop.DOM.Repositories;
+using CarShop.DAL.Repositories;
+
 namespace CarShop
 {
     public class Startup
@@ -58,7 +55,11 @@ namespace CarShop
             services.AddSession();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddTransient<IFileManager, PhotoManager>();
-
+            services.AddScoped<ICarRepository, CarRepository>();
+            services.AddScoped<ICategoryRepository, CategoryRepository>();
+            services.AddScoped<IOrderRepository, OrderRepository>();
+            services.AddScoped<IProducerRepository, ProducerRepository>();
+            services.AddScoped<IWarehouseRepository, WarehouseRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

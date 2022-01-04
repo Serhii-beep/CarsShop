@@ -1,41 +1,44 @@
-﻿using System;
+﻿
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using CarShop;
 using CarShop.Models;
 using System.Text.Json;
 using Microsoft.AspNetCore.Authorization;
+using CarShop.DOM.Repositories;
+using CarShop.DOM.Database;
 
 namespace CarShop.Controllers
 {
     [Authorize]
     public class OrdersController : Controller
     {
-        private readonly DbCarShopContext _context;
-        public OrdersController(DbCarShopContext context)
+        private readonly IOrderRepository _orderRepository;
+        private readonly ICarRepository _carRepository;
+        public OrdersController(IOrderRepository orderRepository, ICarRepository carRepository)
         {
-            _context = context;
+            _orderRepository = orderRepository;
+            _carRepository = carRepository;
         }
 
         // GET: Orders
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            return View(await _context.Orders.Include(c=>c.Warehouse).ToListAsync());
+            return View(_orderRepository.GetAll());
         }
 
         // GET: Orders/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public IActionResult Details(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var order = await _context.Orders.Where(c => c.OrderId == id).Include(c => c.Warehouse).FirstOrDefaultAsync();
+            Order order = _orderRepository.GetByIdWithWarehouse(id ?? default(int));
 
             if (order == null)
             {
@@ -50,7 +53,7 @@ namespace CarShop.Controllers
         {
             ViewBag.returnUrl = returnUrl;
             ViewBag.Cars = orderedCars;
-            ViewData["WarehouseId"] = new SelectList(_context.Warehouses, "WarehouseId", "Address");
+            ViewData["WarehouseId"] = new SelectList(_orderRepository.GetAll(), "WarehouseId", "Address");
             return View();
         }
 
@@ -64,8 +67,8 @@ namespace CarShop.Controllers
             List<CartItem> cars = JsonSerializer.Deserialize<List<CartItem>>(orderedCars);
             if (ModelState.IsValid)
             {
-                _context.Add(order);
-                await _context.SaveChangesAsync();
+                _orderRepository.Add(order);
+                await _orderRepository.SaveChangesAsync();
                 await AddOrdersToCars(cars, order.OrderId);
                 return RedirectToAction("Index", "Cars");
             }
@@ -73,19 +76,19 @@ namespace CarShop.Controllers
         }
 
         // GET: Orders/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public IActionResult Edit(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var order = await _context.Orders.Where(c => c.OrderId == id).Include(c=> c.Warehouse).FirstOrDefaultAsync();
+            Order order = _orderRepository.GetByIdWithWarehouse(id ?? default(int));
             if (order == null)
             {
                 return NotFound();
             }
-            ViewData["WarehouseId"] = new SelectList(_context.Warehouses, "WarehouseId", "Address");
+            ViewData["WarehouseId"] = new SelectList(_orderRepository.GetAll(), "WarehouseId", "Address");
             return View(order);
         }
 
@@ -105,12 +108,12 @@ namespace CarShop.Controllers
             {
                 try
                 {
-                    _context.Update(order);
-                    await _context.SaveChangesAsync();
+                    _orderRepository.Update(order);
+                    await _orderRepository.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!OrderExists(order.OrderId))
+                    if (!_orderRepository.Exists(order.OrderId))
                     {
                         return NotFound();
                     }
@@ -124,20 +127,14 @@ namespace CarShop.Controllers
             return View(order);
         }
 
-
-        private bool OrderExists(int id)
-        {
-            return _context.Orders.Any(e => e.OrderId == id);
-        }
-
         private async Task AddOrdersToCars(List<CartItem> orderedCars, int orderId)
         {
             foreach(var item in orderedCars)
             {
-                Car car = await _context.Cars.Where(c => c.CarId == item.car.CarId).FirstOrDefaultAsync();
+                Car car = _carRepository.GetById(item.car.CarId);
                 car.OrderId = orderId;
             }
-            await _context.SaveChangesAsync();
+            await _carRepository.SaveChangesAsync();
         }
     }
 }

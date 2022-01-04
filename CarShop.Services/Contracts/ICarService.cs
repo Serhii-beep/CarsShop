@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Identity;
 
-namespace CarShop.Models
+namespace CarShop.Services.Contracts
 {
-    public class User /*: IdentityUser*/
+    internal interface ICarService
     {
-
     }
 }

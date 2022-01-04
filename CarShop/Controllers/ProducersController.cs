@@ -1,4 +1,4 @@
-﻿    using System;
+﻿
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -7,31 +7,33 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using CarShop.FileManager;
 using Microsoft.AspNetCore.Authorization;
+using CarShop.DOM.Repositories;
+using CarShop.DOM.Database;
 
 namespace CarShop.Controllers
 {
     [Authorize]
     public class ProducersController : Controller
     {
-        private readonly DbCarShopContext _context;
+        private readonly IProducerRepository _producerRepository;
 
         private readonly IFileManager _fileManager;
 
-        public ProducersController(DbCarShopContext context, IFileManager fileManager)
+        public ProducersController(IProducerRepository producerRepository, IFileManager fileManager)
         {
-            _context = context;
+            _producerRepository = producerRepository;
             _fileManager = fileManager;
         }
 
         // GET: Producers
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            return View(await _context.Producers.ToListAsync());
+            return View(_producerRepository.GetAll());
         }
 
         // GET: Producers/Details/5
         [AllowAnonymous]
-        public async Task<IActionResult> Details(int? id, int? CarId, string returnUrl)
+        public IActionResult Details(int? id, int? CarId, string returnUrl)
         {
             ViewBag.CarId = CarId;
             ViewBag.Path = returnUrl;
@@ -40,7 +42,7 @@ namespace CarShop.Controllers
                 return NotFound();
             }
 
-            var producer = await _context.Producers.Where(c => c.ProducerId == id).FirstOrDefaultAsync();
+            var producer = _producerRepository.GetById(id ?? default(int));
             if (producer == null)
             {
                 return NotFound();
@@ -77,22 +79,22 @@ namespace CarShop.Controllers
 
             if (ModelState.IsValid)
             {
-                _context.Add(producer);
-                await _context.SaveChangesAsync();
+                _producerRepository.Add(producer);
+                await _producerRepository.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
             return View(producer);
         }
 
         // GET: Producers/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public IActionResult Edit(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var producer = await _context.Producers.Where(c => c.ProducerId == id).FirstOrDefaultAsync();
+            var producer = _producerRepository.GetById(id ?? default(int));
             if (producer == null)
             {
                 return NotFound();
@@ -127,12 +129,12 @@ namespace CarShop.Controllers
             {
                 try
                 {
-                    _context.Update(producer);
-                    await _context.SaveChangesAsync();
+                    _producerRepository.Update(producer);
+                    await _producerRepository.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ProducerExists(producer.ProducerId))
+                    if (!_producerRepository.Exists(producer.ProducerId))
                     {
                         return NotFound();
                     }
@@ -147,14 +149,14 @@ namespace CarShop.Controllers
         }
 
         // GET: Producers/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public IActionResult Delete(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var producer = await _context.Producers.Where(c => c.ProducerId == id).FirstOrDefaultAsync();
+            var producer = _producerRepository.GetById(id ?? default(int));
 
             if (producer == null)
             {
@@ -167,18 +169,13 @@ namespace CarShop.Controllers
         // POST: Producers/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int Producerid)
+        public async Task<IActionResult> DeleteConfirmed(int producerId)
         {
-            var producer = await _context.Producers.FindAsync(Producerid);
+            var producer = _producerRepository.GetById(producerId);
             _fileManager.deleteFile(producer.LogoUrl);
-            _context.Producers.Remove(producer);
-            await _context.SaveChangesAsync();
+            _producerRepository.Delete(producerId);
+            await _producerRepository.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
-        }
-
-        private bool ProducerExists(int id)
-        {
-            return _context.Producers.Any(e => e.ProducerId == id);
         }
     }
 }

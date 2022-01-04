@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using CarShop.CustomValidationAttributes;
+﻿using System.ComponentModel.DataAnnotations;
+using CarShop.DOM.CustomValidationAttributes;
 using System.Text.Json.Serialization;
 
 #nullable disable
 
-namespace CarShop
+namespace CarShop.DOM.Database
 {
     public partial class Car
     {

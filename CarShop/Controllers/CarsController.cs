@@ -9,42 +9,43 @@ using Microsoft.AspNetCore.Authorization;
 using CarShop.ViewModels;
 using CarShop.FileManager;
 using Microsoft.AspNetCore.Http;
-using System.IO;
+using CarShop.DAL.Data;
+using CarShop.DOM.Repositories;
+using CarShop.DOM.Database;
+
 namespace CarShop.Controllers
 {
     [Authorize]
     public class CarsController : Controller
     {
-        private readonly DbCarShopContext _context;
+        private readonly ICarRepository _carRepository;
+        private readonly ICategoryRepository _categoryRepository;
+        private readonly IProducerRepository _producerRepository;
+        private readonly IWarehouseRepository _warehouseRepository;
 
         private readonly IFileManager _fileManager;
-        public CarsController(DbCarShopContext context, IFileManager fileManager)
+        public CarsController(ICarRepository carRepository, IFileManager fileManager, ICategoryRepository categoryRepository,
+            IProducerRepository producerRepository, IWarehouseRepository warehouseRepository)
         {
-            _context = context;
+            _carRepository = carRepository;
             _fileManager = fileManager;
+            _categoryRepository = categoryRepository;
+            _producerRepository = producerRepository;
+            _warehouseRepository = warehouseRepository;
         }
         // GET: Cars
         [AllowAnonymous]
-        public async Task<IActionResult> Index(int? categoryId)
+        public IActionResult Index(int? categoryId)
         {
             ViewBag.categoryId = categoryId;
             ViewBag.Path = HttpContext.Request.Path + HttpContext.Request.QueryString;
-            List<SelectListItem> producers = new List<SelectListItem>();
-            foreach(var producer in _context.Producers.ToList())
+            IEnumerable<Car> cars = _carRepository.GetAll();
+            if (categoryId != null)
             {
-                producers.Add(new SelectListItem { Text = producer.Name, Value = producer.Name });
+                cars = cars.Where(c => c.CategoryId == categoryId);
             }
-            ViewBag.Producers = producers;
-            IEnumerable<Car> cars = await _context.Cars.Include(c => c.Producer).ToListAsync();
-            if (categoryId == null)
-            {
-                return View(cars);
-            }
-            else
-            {
-                ViewBag.CategoryName = _context.Categories.Find(categoryId).Name;
-                return View(cars.Where(c=>c.CategoryId == categoryId));
-            }
+            ViewBag.CategoryName = _categoryRepository.GetById(categoryId ?? default(int))?.Name;
+            return View(cars);
         }
                        
 
@@ -52,26 +53,18 @@ namespace CarShop.Controllers
 
         // GET: Cars/Details/5
         [AllowAnonymous]
-        public async Task<IActionResult> Details(int? id, int? categoryId)
+        public IActionResult Details(int id, int? categoryId)
         {
             ViewBag.Path = HttpContext.Request.Path + HttpContext.Request.QueryString;
             ViewBag.categoryId = categoryId;
-            
-            if (id == null)
-            {
-                return NotFound();
-            }
 
-            var car = await _context.Cars.Where(c => c.CarId == id).Include(c => c.Category).Include(c => c.Producer).Include(c=>c.Warehouse).FirstOrDefaultAsync();
+            Car car = _carRepository.GetByIdWithCategoryProducer(id);
             if (car == null)
             {
                 return NotFound();
             }
 
-            List<Car> cars = _context.Cars.Where(a => a.CategoryId == car.CategoryId && a.ProducerId == car.ProducerId && a.CarId != car.CarId).ToList();
-            GetNRandomCars(cars, 4);
-
-            return View(new CarDetailsViewModel { car=car, RelatedCars = cars});
+            return View(new CarDetailsViewModel { car=car, RelatedCars = _carRepository.GetRandomCarsByThis(car, 4)});
         }
 
         // GET: Cars/Create
@@ -80,12 +73,12 @@ namespace CarShop.Controllers
             ViewBag.catId = categoryId;
             if (categoryId != null)
             {
-                ViewBag.categoryName = _context.Categories.Find(categoryId).Name;
+                ViewBag.categoryName = _categoryRepository.GetById(categoryId ?? default(int))?.Name;
             }
 
-            ViewData["CategoryId"] = new SelectList(_context.Categories, "CategoryId", "Name");
-            ViewData["ProducerId"] = new SelectList(_context.Producers, "ProducerId", "Name");
-            ViewData["WarehouseId"] = new SelectList(_context.Warehouses, "WarehouseId", "Address");
+            ViewData["CategoryId"] = new SelectList(_categoryRepository.GetAll(), "CategoryId", "Name");
+            ViewData["ProducerId"] = new SelectList(_producerRepository.GetAll(), "ProducerId", "Name");
+            ViewData["WarehouseId"] = new SelectList(_warehouseRepository.GetAll(), "WarehouseId", "Address");
             return View();
         }
 
@@ -111,8 +104,8 @@ namespace CarShop.Controllers
             {
                 try
                 {
-                    _context.Add(car);
-                    await _context.SaveChangesAsync();
+                    _carRepository.Add(car);
+                    await _carRepository.SaveChangesAsync();
                 }
                 catch (Exception)
                 {
@@ -120,14 +113,14 @@ namespace CarShop.Controllers
                 }
                 return RedirectToAction(nameof(Index), new { categoryId = catId });
             }
-            ViewData["CategoryId"] = new SelectList(_context.Categories, "CategoryId", "Name", car.CategoryId);
-            ViewData["ProducerId"] = new SelectList(_context.Producers, "ProducerId", "Name", car.ProducerId);
-            ViewData["WarehouseId"] = new SelectList(_context.Warehouses, "WarehouseId", "Address", car.WarehouseId);
+            ViewData["CategoryId"] = new SelectList(_categoryRepository.GetAll(), "CategoryId", "Name", car.CategoryId);
+            ViewData["ProducerId"] = new SelectList(_producerRepository.GetAll(), "ProducerId", "Name", car.ProducerId);
+            ViewData["WarehouseId"] = new SelectList(_warehouseRepository.GetAll(), "WarehouseId", "Address", car.WarehouseId);
             return View(car);
         }
 
         // GET: Cars/Edit/5
-        public async Task<IActionResult> Edit(int? id, int? categoryId)
+        public IActionResult Edit(int? id, int? categoryId)
         {
 
             ViewBag.catId = categoryId;
@@ -137,15 +130,15 @@ namespace CarShop.Controllers
                 return NotFound();
             }
 
-            var car = await _context.Cars.Where(c => c.CarId == id).Include(c => c.Category).Include(c => c.Producer).Include(c=>c.Warehouse).FirstOrDefaultAsync();
+            Car car = _carRepository.GetByIdWithCategoryProducer(id ?? default(int));
 
             if (car == null)
             {
                 return NotFound();
             }
-            ViewData["CategoryId"] = new SelectList(_context.Categories, "CategoryId", "Name", car.CategoryId);
-            ViewData["ProducerId"] = new SelectList(_context.Producers, "ProducerId", "Name", car.ProducerId);
-            ViewData["WarehouseId"] = new SelectList(_context.Warehouses, "WarehouseId", "Address", car.WarehouseId);
+            ViewData["CategoryId"] = new SelectList(_categoryRepository.GetAll(), "CategoryId", "Name", car.CategoryId);
+            ViewData["ProducerId"] = new SelectList(_producerRepository.GetAll(), "ProducerId", "Name", car.ProducerId);
+            ViewData["WarehouseId"] = new SelectList(_warehouseRepository.GetAll(), "WarehouseId", "Address", car.WarehouseId);
             return View(car);
         }
 
@@ -161,7 +154,10 @@ namespace CarShop.Controllers
                 return NotFound();
             }
 
-            if(uploadFile == null){}
+            if(uploadFile == null)
+            {
+                ModelState.AddModelError("PhotoNullError", "Please upload the photo");
+            }
             else if (!_fileManager.HasExtenssion(uploadFile,  new string[] { ".jpeg", ".png", ".jpg"}))
             {
                 ModelState.AddModelError("PhotoExError", "Valid extenssions of photo are .jpg, .png, .jpeg");
@@ -176,12 +172,12 @@ namespace CarShop.Controllers
             {
                 try
                 {
-                    _context.Update(car);
-                    await _context.SaveChangesAsync();
+                    _carRepository.Update(car);
+                    await _carRepository.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!CarExists(car.CarId))
+                    if (!_carRepository.Exists(car.CarId))
                     {
                         return NotFound();
                     }
@@ -192,14 +188,14 @@ namespace CarShop.Controllers
                 }
                 return RedirectToAction(nameof(Index), new { categoryId = catId});
             }
-            ViewData["CategoryId"] = new SelectList(_context.Categories, "CategoryId", "Name", car.CategoryId);
-            ViewData["ProducerId"] = new SelectList(_context.Producers, "ProducerId", "Name", car.ProducerId);
-            ViewData["WarehouseId"] = new SelectList(_context.Warehouses, "WarehouseId", "Address", car.WarehouseId);
+            ViewData["CategoryId"] = new SelectList(_categoryRepository.GetAll(), "CategoryId", "Name", car.CategoryId);
+            ViewData["ProducerId"] = new SelectList(_producerRepository.GetAll(), "ProducerId", "Name", car.ProducerId);
+            ViewData["WarehouseId"] = new SelectList(_warehouseRepository.GetAll(), "WarehouseId", "Address", car.WarehouseId);
             return View(car);
         }
 
         // GET: Cars/Delete/5
-        public async Task<IActionResult> Delete(int? id, int? categoryId)
+        public IActionResult Delete(int? id, int? categoryId)
         {
 
             ViewBag.categoryId = categoryId;
@@ -208,7 +204,7 @@ namespace CarShop.Controllers
                 return NotFound();
             }
 
-            var car = await _context.Cars.Where(c => c.CarId == id).Include(c => c.Category).Include(c => c.Producer).Include(c=>c.Warehouse).FirstOrDefaultAsync();
+            Car car = _carRepository.GetByIdWithCategoryProducer(id ?? default(int));
 
             if (car == null)
             {
@@ -223,39 +219,11 @@ namespace CarShop.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int CarId, int? categoryId)
         {
-            Car car = await _context.Cars.FindAsync(CarId);
+            Car car = _carRepository.GetById(CarId);
             _fileManager.deleteFile(car.PhotoUrl);
-            _context.Cars.Remove(car);
-            await _context.SaveChangesAsync();
+            _carRepository.Delete(CarId);
+            await _carRepository.SaveChangesAsync();
             return RedirectToAction(nameof(Index), new { categoryId});
-        }
-
-        private bool CarExists(int id)
-        {
-            return _context.Cars.Any(e => e.CarId == id);
-        }
-        [AllowAnonymous]
-        private List<Car> GetNRandomCars(List<Car> cars, int n )
-        {
-            if(cars.Count <= n)
-            {
-                return cars;
-            }
-            var selected = new List<Car>();
-            double needed = n;
-            double available = cars.Count;
-            var rand = new Random();
-            while (selected.Count < n)
-            {
-                if (rand.NextDouble() < needed / available)
-                {
-                    selected.Add(cars[(int)available - 1]);
-                   needed--;
-                }
-                available--;
-            }
-
-            return selected;
-        }        
+        }  
     }
 }

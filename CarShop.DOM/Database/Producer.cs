@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
-using System.Text.RegularExpressions;
 #nullable disable
 
-namespace CarShop
+namespace CarShop.DOM.Database
 {
     public partial class Producer
     {

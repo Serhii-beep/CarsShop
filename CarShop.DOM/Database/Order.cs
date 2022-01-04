@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 #nullable disable
 
-namespace CarShop
+namespace CarShop.DOM.Database
 {
     public partial class Order
     {
