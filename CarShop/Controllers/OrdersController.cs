@@ -17,10 +17,12 @@ namespace CarShop.Controllers
     public class OrdersController : Controller
     {
         private readonly IOrderRepository _orderRepository;
+        private readonly IWarehouseRepository _warehouseRepository;
         private readonly ICarRepository _carRepository;
-        public OrdersController(IOrderRepository orderRepository, ICarRepository carRepository)
+        public OrdersController(IOrderRepository orderRepository, IWarehouseRepository warehouseRepository, ICarRepository carRepository)
         {
             _orderRepository = orderRepository;
+            _warehouseRepository = warehouseRepository;
             _carRepository = carRepository;
         }
 
@@ -53,7 +55,7 @@ namespace CarShop.Controllers
         {
             ViewBag.returnUrl = returnUrl;
             ViewBag.Cars = orderedCars;
-            ViewData["WarehouseId"] = new SelectList(_orderRepository.GetAll(), "WarehouseId", "Address");
+            ViewData["WarehouseId"] = new SelectList(_warehouseRepository.GetAll(), "WarehouseId", "Address");
             return View();
         }
 
